@@ -9,6 +9,11 @@ export default {
 </script>
 
 <style>
+a {
+  color: black;
+  text-decoration: none;
+}
+
 html {
   margin: 0;
   padding: 0;
