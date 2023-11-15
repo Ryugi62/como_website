@@ -126,25 +126,50 @@ export default {
 }
 
 .dropdown {
-  top: 100px;
-  right: 50px;
-  width: 200px;
-  border: 1px solid #eee;
-  display: flex;
-  padding: 10px;
-  position: absolute;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  flex-direction: column;
-  background-color: #fff;
+  display: none;
 }
 
 .dropdown-item {
-  padding: 10px 0;
+  padding: 15px 0;
   text-align: center;
   border-bottom: 1px solid #eee;
 }
 .active {
   background-color: #eee;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 0 20px;
+  }
+
+  .title {
+    font-size: 20px;
+    margin-right: 20px;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .user {
+    display: none;
+  }
+
+  .hambuger {
+    display: flex;
+  }
+
+  .dropdown {
+    top: 100px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #eee;
+    flex-direction: column;
+    background-color: #fff;
+  }
 }
 </style>
