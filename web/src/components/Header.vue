@@ -1,30 +1,34 @@
 <template>
-  <div class="header">
-    <RouterLink to="/" class="title">MOCO </RouterLink>
-    <div class="nav">
-      <RouterLink
-        v-for="link in linkList"
-        :key="link.name"
-        :to="link.path"
-        class="nav-item link"
-        >{{ link.name }}</RouterLink
-      >
-    </div>
-    <div class="user">
-      <RouterLink to="/" class="user-item button login">로그인</RouterLink>
-      <RouterLink to="/" class="user-item button register">회원가입</RouterLink>
-    </div>
-    <div class="hambuger" :class="{ active: menu }" @click="menu = !menu">
-      &equiv;
-    </div>
-    <div class="dropdown" v-if="menu">
-      <RouterLink
-        v-for="link in linkList"
-        :key="link.name"
-        :to="link.path"
-        class="dropdown-item link"
-        >{{ link.name }}</RouterLink
-      >
+  <div class="overlay">
+    <div class="header">
+      <RouterLink to="/" class="title">MOCO </RouterLink>
+      <div class="nav">
+        <RouterLink
+          v-for="link in linkList"
+          :key="link.name"
+          :to="link.path"
+          class="nav-item link"
+          >{{ link.name }}</RouterLink
+        >
+      </div>
+      <div class="user">
+        <RouterLink to="/" class="user-item button login">로그인</RouterLink>
+        <RouterLink to="/" class="user-item button register"
+          >회원가입</RouterLink
+        >
+      </div>
+      <div class="hambuger" :class="{ active: menu }" @click="menu = !menu">
+        &equiv;
+      </div>
+      <div class="dropdown" v-if="menu">
+        <RouterLink
+          v-for="link in linkList"
+          :key="link.name"
+          :to="link.path"
+          class="dropdown-item link"
+          >{{ link.name }}</RouterLink
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -55,14 +59,23 @@ export default {
   /* border: 1px solid red; */
 }
 
+.overlay {
+  top: 0;
+  left: 0;
+  width: 100%;
+  position: fixed;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #eee;
+}
+
 .header {
+  margin: auto;
   height: 100px;
   display: flex;
   padding: 0 50px;
   font-size: 16px;
+  max-width: 1440px;
   align-items: center;
-  border-bottom: 1px solid #eee;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .title {
