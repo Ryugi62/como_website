@@ -108,23 +108,32 @@ export default {
 }
 
 .btn {
+  cursor: pointer;
+  border: 1px solid black;
   padding: 10px 20px;
   font-weight: bold;
+  margin-left: 10px;
   border-radius: 5px;
-  border: 1px solid #f8b700;
 }
 .btn:hover {
-  text-decoration: underline;
+  background: #f5f4f4;
 }
-
-.login {
-  border: 1px solid black;
+.btn:active {
+  background: #e6e6e6;
 }
 
 .register {
   color: #fff;
-  margin-left: 10px;
+  border-color: #f8b700;
   background-color: #f8b700;
+}
+.register:hover {
+  background: #f1b100;
+  border-color: #f1b100;
+}
+.register:active {
+  background: #e6a100;
+  border-color: #e6a100;
 }
 
 .hambuger {
