@@ -129,11 +129,9 @@ export default {
 }
 .register:hover {
   background: #f1b100;
-  border-color: #f1b100;
 }
 .register:active {
   background: #e6a100;
-  border-color: #e6a100;
 }
 
 .hambuger {
