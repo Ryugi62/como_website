@@ -39,7 +39,7 @@ export default {
       menu: false,
 
       linkList: [
-        { name: "회사소개", path: "/" },
+        { name: "회사소개", path: "/intro" },
         { name: "프로그램 소개", path: "/" },
         { name: "상품가격", path: "/" },
         { name: "프로그램 다운로드", path: "/" },
