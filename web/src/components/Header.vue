@@ -95,11 +95,12 @@ export default {
 }
 
 .link:hover {
-  color: #f8b700;
+  color: black;
+  font-weight: bolder;
   text-decoration: underline;
 }
 .link:active {
-  color: black;
+  color: #f8b700;
 }
 
 .user {
