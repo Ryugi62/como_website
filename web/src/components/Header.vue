@@ -94,10 +94,11 @@ export default {
 }
 
 .link:hover {
+  color: #f8b700;
   text-decoration: underline;
 }
 .link:active {
-  color: #f8b700;
+  color: black;
 }
 
 .user {
