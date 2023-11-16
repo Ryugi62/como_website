@@ -12,10 +12,8 @@
         >
       </div>
       <div class="user">
-        <RouterLink to="/" class="user-item button login">로그인</RouterLink>
-        <RouterLink to="/" class="user-item button register"
-          >회원가입</RouterLink
-        >
+        <RouterLink to="/" class="user-item btn login">로그인</RouterLink>
+        <RouterLink to="/" class="user-item btn register">회원가입</RouterLink>
       </div>
       <div class="hambuger" :class="{ active: menu }" @click="menu = !menu">
         &equiv;
@@ -99,7 +97,7 @@ export default {
   text-decoration: underline;
 }
 .link:active {
-  color: #00a0e9;
+  color: #f8b700;
 }
 
 .user {
@@ -107,13 +105,13 @@ export default {
   margin-left: auto;
 }
 
-.button {
+.btn {
   padding: 10px 20px;
   font-weight: bold;
   border-radius: 5px;
-  border: 1px solid #00a0e9;
+  border: 1px solid #f8b700;
 }
-.button:hover {
+.btn:hover {
   text-decoration: underline;
 }
 
@@ -124,7 +122,7 @@ export default {
 .register {
   color: #fff;
   margin-left: 10px;
-  background-color: #00a0e9;
+  background-color: #f8b700;
 }
 
 .hambuger {
@@ -148,7 +146,7 @@ export default {
   border-bottom: 1px solid #eee;
 }
 .active {
-  background-color: #eee;
+  color: #f8b700;
 }
 
 @media screen and (max-width: 768px) {
