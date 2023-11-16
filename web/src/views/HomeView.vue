@@ -75,7 +75,7 @@ export default {
 
 .comment span {
   color: #f8b700;
-  font-weight: 700;
+  font-weight: bolder;
 }
 
 .btn {
