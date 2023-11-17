@@ -44,11 +44,12 @@ export default {
 }
 
 .main {
-  height: 100vh;
   margin: 0 auto;
+  height: calc(100vh - 101px);
   display: flex;
   padding: 0 50px;
   max-width: 1440px;
+  margin-top: 101px;
   align-items: center;
   justify-content: center;
 }
