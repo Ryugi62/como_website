@@ -23,4 +23,9 @@ body,
   height: 100%;
   width: 100%;
 }
+
+#app {
+  color: white;
+  background-color: #161616;
+}
 </style>

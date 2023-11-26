@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import HeaderComponent from "@/components/Header.vue";
+import HeaderComponent from "@/components/HeaderComponent.vue";
 
 export default {
   name: "HomeView",
@@ -28,12 +28,15 @@ export default {
 .home {
   width: 100%;
   height: 100%;
-  color: #ffffff;
-  background-color: #161616;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
+  width: calc(100% - 40px);
+  height: 100%;
   margin: auto;
   max-width: 1200px;
+  padding: 20px;
 }
 </style>
