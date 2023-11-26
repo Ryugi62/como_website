@@ -41,19 +41,19 @@ export default {
 }
 
 .home {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .container {
   width: calc(100% - 40px);
-  max-width: 1440px;
   height: 100%;
   margin: auto;
   padding: 20px;
   display: flex;
+  max-width: 1440px;
 }
 
 .container-text-zone {
@@ -74,15 +74,15 @@ export default {
   font-size: 20px;
 }
 .text-comment > span {
-  font-weight: bold;
   color: #ffc025;
+  font-weight: bold;
 }
 
 .text-button {
+  color: #161616;
   padding: 15px 30px;
   font-size: 20px;
   margin-top: 30px;
-  color: #161616;
 }
 
 .container-img-zone {
