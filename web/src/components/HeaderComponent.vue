@@ -78,6 +78,7 @@ export default {
 
 .header {
   top: 0;
+  width: calc(100% - 40px);
   margin: auto;
   display: flex;
   padding: 20px;
