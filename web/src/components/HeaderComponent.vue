@@ -17,8 +17,12 @@
       </RouterLink>
     </div>
 
-    <RouterLink class="login-button" to="/login"> 로그인 </RouterLink>
-    <RouterLink class="register-button" to="/register"> 회원가입 </RouterLink>
+    <RouterLink class="login-button como-button" to="/login">
+      로그인
+    </RouterLink>
+    <RouterLink class="register-button como-button" to="/register">
+      회원가입
+    </RouterLink>
 
     <i
       class="fa-solid fa-bars buger-button"
@@ -83,7 +87,7 @@ export default {
   display: flex;
   padding: 20px;
   position: sticky;
-  max-width: 1200px;
+  max-width: 1440px;
   align-items: center;
 }
 
@@ -115,48 +119,31 @@ export default {
   margin-left: 20px;
 }
 .nav-item:hover {
+  color: #ff9f00;
   text-decoration: underline;
 }
 .nav-item:active {
-  color: #997416;
-}
-
-.login-button,
-.register-button {
-  border: 1px solid;
-  cursor: pointer;
-  padding: 10px 20px;
-  font-weight: bold;
-  border-radius: 5px;
-  transition: 0.3s;
+  color: #cb7e02;
 }
 
 .login-button {
+  background: transparent;
   margin-left: auto;
+  border-color: white;
 }
 .login-button:hover {
   color: white;
-  border-color: #ffc025;
-  background-color: #ffc025;
+  background: #ff9f00;
+  border-color: #ff9f00;
 }
 .login-button:active {
-  color: #161616;
   transition: 0.1s;
+  background: #cb7e02;
+  border-color: #cb7e02;
 }
 
 .register-button {
-  background: #ffc025;
   margin-left: 20px;
-  border-color: #ffc025;
-}
-.register-button:hover {
-  color: #161616;
-  border-color: white;
-  background-color: white;
-}
-.register-button:active {
-  color: #ffc025;
-  transition: 0.1s;
 }
 
 .buger-button {
