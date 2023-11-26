@@ -10,7 +10,7 @@ export default {
 
 <style>
 a {
-  color: black;
+  color: inherit;
   text-decoration: none;
 }
 
