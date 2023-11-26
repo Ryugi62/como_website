@@ -1,11 +1,11 @@
 <template>
-  <div class="header">
+  <header class="header">
     <RouterLink to="/" class="header-logo">
       <i class="fa-brands fa-bitcoin header-icon"></i>
-      <div class="header-title">코모</div>
+      <span class="header-title">코모</span>
     </RouterLink>
 
-    <div class="nav">
+    <nav class="nav">
       <RouterLink
         v-for="link in linkList"
         :key="link.name"
@@ -15,51 +15,40 @@
       >
         {{ link.name }}
       </RouterLink>
-    </div>
+    </nav>
 
-    <RouterLink class="login-button como-button" to="/login">
-      로그인
-    </RouterLink>
-    <RouterLink class="register-button como-button" to="/register">
-      회원가입
-    </RouterLink>
+    <RouterLink class="button como-button2 login-button" to="/login"
+      >로그인</RouterLink
+    >
+    <RouterLink class="button como-button1 register-button" to="/register"
+      >회원가입</RouterLink
+    >
 
     <i
-      class="fa-solid fa-bars buger-button"
-      @click="bugerMenu = !bugerMenu"
+      class="fa-solid fa-bars burger-button"
+      @click="burgerMenu = !burgerMenu"
     ></i>
-    <div class="buger-menu" v-if="bugerMenu">
-      <div class="buger-menu-item" v-for="link in linkList" :key="link.name">
-        <RouterLink
-          :to="link.path"
-          class="buger-menu-link"
-          :class="{ active: $route.path === link.path }"
-        >
-          {{ link.name }}
-        </RouterLink>
-      </div>
-
-      <div class="buger-menu-item">
-        <RouterLink to="/login" class="buger-menu-link"> 로그인 </RouterLink>
-      </div>
-
-      <div class="buger-menu-item">
-        <RouterLink to="/register" class="buger-menu-link">
-          회원가입
-        </RouterLink>
-      </div>
+    <div class="burger-menu" v-if="burgerMenu">
+      <RouterLink
+        v-for="link in linkList"
+        :key="link.name"
+        :to="link.path"
+        class="burger-menu-link"
+      >
+        {{ link.name }}
+      </RouterLink>
+      <RouterLink to="/login" class="burger-menu-link">로그인</RouterLink>
+      <RouterLink to="/register" class="burger-menu-link">회원가입</RouterLink>
     </div>
-  </div>
+  </header>
 </template>
 
 <script>
 export default {
   name: "HeaderComponent",
-
   data() {
     return {
-      bugerMenu: false,
-
+      burgerMenu: false,
       linkList: [
         { name: "홈", path: "/" },
         { name: "회사소개", path: "/intro" },
@@ -76,44 +65,41 @@ export default {
 </script>
 
 <style scoped>
-* {
-  /* border: 1px solid red; */
-}
-
 .header {
   top: 0;
   width: calc(100% - 40px);
-  margin: auto;
-  display: flex;
   padding: 20px;
-  position: sticky;
-  max-width: 1440px;
+  display: flex;
   align-items: center;
   background-color: #161616;
+  position: sticky;
+  max-width: 1440px;
+  margin: auto;
 }
 
 .header-logo {
   color: #ffc025;
   display: flex;
-  font-weight: bold;
   align-items: center;
+  font-weight: bold;
 }
 
 .header-icon {
-  width: fit-content;
-  height: fit-content;
   font-size: 30px;
 }
 
 .header-title {
-  margin: 0;
-  font-size: 30px;
   margin-left: 10px;
+  font-size: 30px;
 }
 
 .nav {
-  display: flex;
   margin-left: 50px;
+  display: flex;
+}
+
+.nav-item {
+  margin-left: 20px;
 }
 .nav-item:not(:first-child) {
   margin-left: 20px;
@@ -126,51 +112,34 @@ export default {
 }
 
 .login-button {
-  background: transparent;
   margin-left: auto;
-  border-color: white;
-}
-.login-button:hover {
-  color: white;
-  background: #ff9f00;
-  border-color: #ff9f00;
-}
-.login-button:active {
-  transition: 0.1s;
-  background: #cb7e02;
-  border-color: #cb7e02;
 }
 
 .register-button {
   margin-left: 20px;
 }
 
-.buger-button {
-  cursor: pointer;
+.burger-button {
   display: none;
+  cursor: pointer;
   font-size: 30px;
   margin-left: auto;
 }
 
-.buger-menu {
+.burger-menu {
+  display: none;
   top: 100%;
   right: 0;
   width: 100%;
-  color: white;
   padding: 10px;
-  display: none;
   position: absolute;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
   background-color: #161616;
 }
 
-.buger-menu-item {
+.burger-menu-link {
   margin: 10px 0;
-  padding: 10px;
-}
-
-.buger-menu-link {
   color: white;
   text-decoration: none;
 }
@@ -180,31 +149,22 @@ export default {
     padding: 10px;
   }
 
-  .header-logo {
-    font-size: 20px;
-  }
-
+  .header-logo,
   .header-title {
     font-size: 20px;
   }
 
-  .nav {
-    display: none;
-  }
-
-  .login-button {
-    display: none;
-  }
-
+  .nav,
+  .login-button,
   .register-button {
     display: none;
   }
 
-  .buger-button {
+  .burger-button {
     display: block;
   }
 
-  .buger-menu {
+  .burger-menu {
     display: flex;
   }
 }
