@@ -20,31 +20,46 @@ body,
   margin: 0;
   padding: 0;
   outline: 0;
+  color: white;
   background-color: #161616;
 }
 
-#app {
-  color: white;
-}
-
-.como-button {
+/* 공통 버튼 스타일 */
+.button {
   width: fit-content;
-  cursor: pointer;
   height: fit-content;
-  border: 1px solid #ffc025;
+  cursor: pointer;
   padding: 10px 20px;
-  background: #ffc025;
   transition: 0.3s;
   font-weight: bold;
   border-radius: 10px;
 }
-.como-button:hover {
+
+.como-button1 {
+  color: #161616;
+  border: 1px solid #ffc025;
+  background: #ffc025;
+}
+.como-button1:hover {
   background: #ff9f00;
   border-color: #ff9f00;
 }
-.como-button:active {
-  transition: 0.1s;
+.como-button1:active {
   background: #cb7e02;
   border-color: #cb7e02;
+}
+
+.como-button2 {
+  border: 1px solid white;
+  background: transparent;
+}
+.como-button2:hover {
+  color: #161616;
+  background: #eeeeee;
+  border-color: #eeeeee;
+}
+.como-button2:active {
+  background: #cccccc;
+  border-color: #cccccc;
 }
 </style>
