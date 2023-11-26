@@ -64,6 +64,15 @@ export default {
   font-size: 20px;
 }
 
+.text-comment::before {
+  width: 100%;
+  height: 1px;
+  margin: 20px 0;
+  content: "";
+  display: block;
+  background-color: #ffc025;
+}
+
 .text-comment strong {
   color: #ffc025;
   font-weight: bold;
