@@ -14,15 +14,13 @@ a {
   text-decoration: none;
 }
 
-html {
+html,
+body,
+#app {
   margin: 0;
   padding: 0;
   outline: 0;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  outline: 0;
+  height: 100%;
+  width: 100%;
 }
 </style>
