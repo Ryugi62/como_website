@@ -89,13 +89,14 @@ export default {
   position: sticky;
   max-width: 1440px;
   align-items: center;
+  background-color: #161616;
 }
 
 .header-logo {
+  color: #ffc025;
   display: flex;
   font-weight: bold;
   align-items: center;
-  color: #ffc025;
 }
 
 .header-icon {
@@ -114,13 +115,11 @@ export default {
   display: flex;
   margin-left: 50px;
 }
-
 .nav-item:not(:first-child) {
   margin-left: 20px;
 }
 .nav-item:hover {
   color: #ff9f00;
-  text-decoration: underline;
 }
 .nav-item:active {
   color: #cb7e02;
