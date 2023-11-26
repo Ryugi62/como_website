@@ -2,24 +2,22 @@
   <div class="home">
     <HeaderComponent />
 
-    <div class="container">
-      <div class="container-text-zone">
-        <div class="text-title">
+    <section class="container">
+      <article class="text-content">
+        <h2 class="text-title">
           국내에서 가장 커스터마이징 가능한 암호화폐 트레이딩 봇
-        </div>
-
-        <div class="text-comment">
+        </h2>
+        <p class="text-comment">
           코인을 수익화할수 있는 모든 툴을 제공하는 우리는
-          <span>코모</span>입니다.
-        </div>
+          <strong>코모</strong>입니다.
+        </p>
+        <button class="button como-button1">코모와 함께하기</button>
+      </article>
 
-        <div class="text-button como-button">코모와 함께하기</div>
+      <div class="image-container">
+        <img src="@/assets/img/graph.png" alt="그래프 이미지" />
       </div>
-
-      <div class="container-img-zone">
-        <img src="@/assets/img/graph.png" class="container-text-img" />
-      </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -28,7 +26,6 @@ import HeaderComponent from "@/components/HeaderComponent.vue";
 
 export default {
   name: "HomeView",
-
   components: {
     HeaderComponent,
   },
@@ -36,10 +33,6 @@ export default {
 </script>
 
 <style scoped>
-* {
-  /* border: 1px solid red; */
-}
-
 .home {
   width: 100vw;
   height: 100vh;
@@ -56,43 +49,37 @@ export default {
   max-width: 1440px;
 }
 
-.container-text-zone {
+.text-content {
   margin: auto;
   max-width: 50%;
 }
 
 .text-title {
-  height: fit-content;
   font-size: 60px;
   font-weight: bold;
   margin-bottom: 20px;
 }
 
 .text-comment {
-  margin: auto;
-  height: fit-content;
   font-size: 20px;
 }
-.text-comment > span {
+
+.text-comment strong {
   color: #ffc025;
   font-weight: bold;
 }
 
-.text-button {
-  color: #161616;
-  padding: 15px 30px;
+.como-button1 {
   font-size: 20px;
-  margin-top: 30px;
 }
 
-.container-img-zone {
+.image-container {
   margin: auto;
 }
 
-.container-text-img {
+.image-container img {
   width: 100%;
-  height: 100%;
-  margin: auto;
+  height: auto;
 }
 
 @media (max-width: 768px) {
@@ -100,33 +87,25 @@ export default {
     flex-direction: column-reverse;
   }
 
-  .container-text-zone {
-    margin: auto;
-    text-align: center;
+  .text-content {
+    max-width: 100%;
   }
 
   .text-title {
     font-size: 40px;
   }
 
-  .text-comment {
-    font-size: 15px;
-    margin-bottom: 20px;
+  .image-container {
+    margin-top: 20px;
   }
 
-  .text-button {
-    margin: auto;
-    font-size: 15px;
-  }
-
-  .container-img-zone {
-    margin: auto;
-  }
-
-  .container-text-img {
+  .image-container img {
     width: 100%;
-    height: 100%;
-    margin: auto;
+    height: auto;
+  }
+
+  .como-button1 {
+    width: 100%;
   }
 }
 </style>
