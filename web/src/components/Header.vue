@@ -26,7 +26,11 @@
     ></i>
     <div class="buger-menu" v-if="bugerMenu">
       <div class="buger-menu-item" v-for="link in linkList" :key="link.name">
-        <RouterLink :to="link.path" class="buger-menu-link">
+        <RouterLink
+          :to="link.path"
+          class="buger-menu-link"
+          :class="{ active: $route.path === link.path }"
+        >
           {{ link.name }}
         </RouterLink>
       </div>
@@ -53,13 +57,14 @@ export default {
       bugerMenu: false,
 
       linkList: [
+        { name: "홈", path: "/" },
         { name: "회사소개", path: "/intro" },
         { name: "프로그램 소개", path: "/program" },
         { name: "상품가격", path: "/price" },
         { name: "프로그램 다운로드", path: "/download" },
         { name: "고객센터", path: "/customer" },
-        { name: "레퍼럴", path: "/" },
-        { name: "상담신청", path: "/" },
+        { name: "레퍼럴", path: "/referral" },
+        { name: "상담신청", path: "/counsel" },
       ],
     };
   },
@@ -113,10 +118,6 @@ export default {
 }
 .nav-item:active {
   color: #997416;
-}
-
-.active {
-  color: #ffc025;
 }
 
 .login-button,
@@ -219,5 +220,9 @@ export default {
   .buger-menu {
     display: flex;
   }
+}
+
+.active {
+  color: #ffc025;
 }
 </style>
