@@ -20,13 +20,11 @@ body,
   margin: 0;
   padding: 0;
   outline: 0;
-  height: 100%;
-  width: 100%;
+  background-color: #161616;
 }
 
 #app {
   color: white;
-  background-color: #161616;
 }
 
 .como-button {
