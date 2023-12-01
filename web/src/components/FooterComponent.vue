@@ -99,4 +99,18 @@ export default {
   height: 300px;
   margin-left: 30px;
 }
+
+@media screen and (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+  }
+
+  .footer-article {
+    margin-bottom: 30px;
+  }
+
+  .footer-image {
+    margin-left: 0;
+  }
+}
 </style>
