@@ -54,16 +54,20 @@
         <!-- 핵심원칙 내용 -->
       </div>
     </section>
+
+    <FooterComponent />
   </div>
 </template>
 
 <script>
 import HeaderComponent from "@/components/HeaderComponent.vue";
+import FooterComponent from "@/components/FooterComponent.vue";
 
 export default {
   name: "IntroView",
   components: {
     HeaderComponent,
+    FooterComponent,
   },
 };
 </script>
