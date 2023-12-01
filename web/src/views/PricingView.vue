@@ -1,140 +1,100 @@
 <template>
   <div class="pricing-view">
     <HeaderComponent />
-    <div class="pricing-container">
+    <section class="pricing-section">
       <h1 class="pricing-title">Pricing</h1>
       <p class="pricing-description">
         Our pricing is not volatile, but it's not stagnant either, it's exactly
-        what it should be.
+        what it should be
       </p>
-      <div class="pricing-list">
+      <div class="pricing-cards">
         <div
-          :key="item.plan"
-          v-for="item in pricingData"
-          class="pricing-item"
-          :class="{ 'popular-item': item.popular }"
+          v-for="plan in pricingPlans"
+          :key="plan.name"
+          class="card-pricing"
+          :class="{ 'is-popular': plan.isPopular }"
         >
-          <div class="item-plan">{{ item.plan }}</div>
-          <div class="item-price">
-            <span>{{ item.price.toLocaleString("ko-KR") }}원</span> / 월
-          </div>
-          <div class="item-detail">{{ item.detail }}</div>
-          <button class="btn-start">Get Started</button>
-
-          <div v-if="item.popular" class="popular">Most Popular</div>
+          <p class="plan-name">{{ plan.name }}</p>
+          <p class="plan-price">
+            <strong>{{ plan.price.toLocaleString("ko-KR") }}원</strong> / 월
+          </p>
+          <p class="plan-details">{{ plan.details }}</p>
+          <button class="button-get-started">Get Started</button>
+          <div v-if="plan.isPopular" class="label-popular">Most Popular</div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="feature-container">
-      <h1 class="feature-title">Compare Features</h1>
-
-      <div class="feature-list">
-        <div class="feature-item" v-for="item in pricingData" :key="item.plan">
-          <h1 class="feature-plan-title">{{ item.plan }}</h1>
-
+    <section class="features-section">
+      <h1 class="features-title">Compare Features</h1>
+      <div class="features-cards">
+        <div v-for="plan in pricingPlans" :key="plan.name" class="card-feature">
+          <h2 class="plan-name">{{ plan.name }}</h2>
           <div
-            v-for="feature in item.features"
-            :key="feature.title"
-            class="feature-detail"
+            v-for="feature in plan.features"
+            :key="feature.name"
+            class="feature-item"
           >
-            <span class="feature-title">
-              <i
-                v-if="feature.available"
-                class="fas fa-check-circle"
-                style="color: #ffc025"
-              ></i>
-
-              {{ feature.title }}
+            <span v-if="feature.isAvailable" class="icon-check">
+              <i class="fas fa-check"></i>
+              {{ feature.name }}
             </span>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <FooterComponent />
   </div>
 </template>
 
 <script>
 import HeaderComponent from "@/components/HeaderComponent.vue";
+import FooterComponent from "@/components/FooterComponent.vue";
 
 export default {
   name: "PricingView",
   components: {
     HeaderComponent,
+    FooterComponent,
   },
   data() {
     return {
-      pricingData: [
+      pricingPlans: [
         {
-          plan: "Basic",
+          name: "Basic",
           price: 10000,
-          detail: "For individuals and small teams",
-          popular: false,
+          details: "For hobby projects or small teams.",
+          isPopular: false,
           features: [
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
+            { name: "1 User", isAvailable: true },
+            { name: "Unlimited Projects", isAvailable: true },
+            { name: "2GB Storage", isAvailable: true },
+            { name: "Community Support", isAvailable: true },
           ],
         },
         {
-          plan: "Pro",
+          name: "Pro",
           price: 1000000,
-          detail: "For individuals and small teams",
-          popular: true,
+          details: "For ambitious individuals.",
+          isPopular: true,
           features: [
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
+            { name: "5 Users", isAvailable: true },
+            { name: "Unlimited Projects", isAvailable: true },
+            { name: "50GB Storage", isAvailable: true },
+            { name: "Community Support", isAvailable: true },
           ],
         },
         {
-          plan: "Basic",
-          price: 10000000,
-          detail: "For individuals and small teams",
-          popular: false,
+          name: "Business",
+          price: 100000000,
+          details: "For small to medium-sized businesses.",
+          isPopular: false,
           features: [
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
-            {
-              title: "Market Forecasting",
-              available: true,
-            },
+            { name: "10 Users", isAvailable: true },
+            { name: "Unlimited Projects", isAvailable: true },
+            { name: "100GB Storage", isAvailable: true },
+            { name: "Community Support", isAvailable: true },
           ],
         },
       ],
@@ -142,17 +102,22 @@ export default {
   },
 };
 </script>
+
 <style scoped>
-.pricing-container,
-.feature-container {
+.pricing-section,
+.features-section {
   margin: 0 auto;
   padding: 20px;
   max-width: 1440px;
 }
 
+.pricing-section {
+  margin-bottom: 40px;
+}
+
 .pricing-title,
-.feature-title {
-  margin: 40px 0;
+.features-title {
+  margin: 50px 0;
   font-size: 2.5rem;
   text-align: center;
 }
@@ -163,64 +128,60 @@ export default {
   margin-bottom: 40px;
 }
 
-.pricing-list {
+.pricing-cards,
+.features-cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.pricing-item {
+.card-pricing,
+.card-feature {
   width: 300px;
   margin: 10px;
   padding: 20px;
+  position: relative;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+}
+
+.card-pricing:nth-child(odd) {
   background-color: #282828;
 }
-.pricing-item:nth-child(2) {
-  background-color: inherit;
-}
 
-.pricing-item .item-plan {
+.card-feature .plan-name {
   font-size: 1.8rem;
+  margin-bottom: 30px;
+}
+
+.card-pricing .plan-price {
+  margin-top: 40px;
   margin-bottom: 15px;
 }
 
-.pricing-item .item-price {
-  margin-bottom: 15px;
-}
-.pricing-item .item-price span {
+.card-pricing .plan-price strong {
   font-size: 2.5rem;
   font-weight: bold;
 }
 
-.pricing-item .item-detail {
-  margin-bottom: 20px;
-}
-
-.btn-start {
+.button-get-started {
   width: 100%;
   border: none;
   cursor: pointer;
-  display: block;
   padding: 10px 20px;
+  margin-top: 50px;
   transition: background-color 0.3s;
   border-radius: 5px;
   background-color: #ffc025;
 }
-
-.btn-start:hover {
+.button-get-started:hover {
   background-color: #ff9f00;
 }
 
-.popular-item {
-  position: relative;
-}
-
-.popular {
+.label-popular {
   top: 0;
   right: 0;
-  color: white;
+  color: #282828;
   padding: 5px 10px;
   position: absolute;
   font-size: 0.85rem;
@@ -228,30 +189,18 @@ export default {
   border-radius: 5px;
 }
 
-.feature-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 .feature-item {
-  width: 300px;
-  margin: 10px;
-  padding: 20px;
-  border-radius: 8px;
+  margin-bottom: 15px;
 }
-
-.feature-item .feature-plan-title {
-  font-size: 1.8rem;
-  padding-bottom: 10px;
+.feature-item .icon-check {
+  display: flex;
+  align-items: center;
 }
-
-.feature-item .feature-detail {
-  margin-bottom: 10px;
-}
-
-.feature-item .feature-title {
-  font-size: 1.1rem;
-  margin-left: 10px;
+.feature-item .icon-check i {
+  color: white;
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  background-color: #ffc025;
 }
 </style>
