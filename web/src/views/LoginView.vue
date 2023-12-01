@@ -70,11 +70,13 @@ export default {
   height: 100vh;
   display: flex;
   flex-wrap: wrap;
+  overflow-y: hidden;
   align-content: center;
 }
 
 .image-container {
   flex: 1 1 50%;
+  height: 100%;
   max-width: 50%;
 }
 
@@ -82,6 +84,7 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  box-sizing: border-box;
 }
 
 .login-article {
