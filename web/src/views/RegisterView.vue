@@ -1,7 +1,7 @@
 <template>
   <section class="registration-section">
     <div class="image-container">
-      <img src="@/assets/img/login_input.png" alt="Registration Image" />
+      <img src="@/assets/img/register-bitcoin.png" alt="Registration Image" />
     </div>
 
     <article class="registration-article">
@@ -83,12 +83,14 @@ export default {
   height: 100vh;
   display: flex;
   flex-wrap: wrap;
+  overflow-y: hidden;
   align-content: center;
 }
 
 .image-container {
   flex: 1 1 50%;
   max-width: 50%;
+  height: 100%;
 }
 
 .image-container img {
