@@ -55,7 +55,6 @@ export default {
         { name: "프로그램 소개", path: "/program" },
         { name: "상품가격", path: "/pricing" },
         { name: "프로그램 다운로드", path: "/download" },
-        { name: "고객센터", path: "/customer" },
         { name: "레퍼럴", path: "/referral" },
         { name: "상담신청", path: "/counsel" },
       ],
