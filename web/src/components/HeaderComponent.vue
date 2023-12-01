@@ -53,7 +53,7 @@ export default {
         { name: "홈", path: "/" },
         { name: "회사소개", path: "/intro" },
         { name: "프로그램 소개", path: "/program" },
-        { name: "상품가격", path: "/price" },
+        { name: "상품가격", path: "/pricing" },
         { name: "프로그램 다운로드", path: "/download" },
         { name: "고객센터", path: "/customer" },
         { name: "레퍼럴", path: "/referral" },
@@ -75,6 +75,7 @@ export default {
   position: sticky;
   max-width: 1440px;
   margin: auto;
+  z-index: 100;
 }
 
 .header-logo {
