@@ -44,6 +44,7 @@ export default {
 
 <style scoped>
 .footer {
+  width: 100%;
   padding: 30px;
   font-size: 14px;
   margin-top: 50px;
