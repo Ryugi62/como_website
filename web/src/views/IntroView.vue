@@ -165,12 +165,19 @@ section {
   width: 300px;
   height: 300px;
   padding: 50px;
-  margin-bottom: 20px;
-  background-color: #282828;
-  border-radius: 50%;
   display: flex;
+  font-size: 1.2rem;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   align-items: center;
+  margin-bottom: 20px;
+  border-radius: 50%;
   justify-content: center;
+  background-color: #282828;
+}
+.core-item:hover {
+  box-shadow: 0 0 20px #ffffff4d;
+  transform: scale(1.1);
 }
 
 @media screen and (max-width: 768px) {
