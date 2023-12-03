@@ -15,7 +15,7 @@
       </article>
 
       <div class="image-container">
-        <img src="@/assets/img/graph.png" alt="그래프 이미지" />
+        <img src="@/assets/img/main-bitcoin.png" />
       </div>
     </section>
   </div>
@@ -41,10 +41,9 @@ export default {
 }
 
 .container {
-  width: calc(100% - 40px);
+  width: 100%;
   height: 100%;
-  margin: auto;
-  padding: 20px;
+  margin: auto 20px;
   display: flex;
   max-width: 1440px;
 }
@@ -89,6 +88,8 @@ export default {
 .image-container img {
   width: 100%;
   height: auto;
+  max-width: 500px;
+  max-height: 500px;
 }
 
 @media (max-width: 768px) {
