@@ -172,4 +172,24 @@ section {
   align-items: center;
   justify-content: center;
 }
+
+@media screen and (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .text-content {
+    margin-bottom: 50px;
+  }
+
+  .image-container {
+    margin-bottom: 50px;
+  }
+
+  .core-item {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+  }
+}
 </style>
