@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import IntroView from "../views/IntroView.vue";
-import LoginView from "../views/LoginView.vue";
-import RegisterView from "../views/RegisterView.vue";
+import ProgramView from "../views/ProgramView.vue";
 import PricingView from "../views/PricingView.vue";
 import DownloadView from "../views/DownloadView.vue";
+import LoginView from "../views/LoginView.vue";
+import RegisterView from "../views/RegisterView.vue";
 
 const routes = [
   {
@@ -18,14 +19,9 @@ const routes = [
     component: IntroView,
   },
   {
-    path: "/login",
-    name: "login",
-    component: LoginView,
-  },
-  {
-    path: "/register",
-    name: "register",
-    component: RegisterView,
+    path: "/program",
+    name: "program",
+    component: ProgramView,
   },
   {
     path: "/pricing",
@@ -36,6 +32,16 @@ const routes = [
     path: "/download",
     name: "download",
     component: DownloadView,
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: LoginView,
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: RegisterView,
   },
 ];
 
