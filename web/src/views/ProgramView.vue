@@ -113,10 +113,6 @@ export default {
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box; /* 모든 요소에 박스 크기 조정 */
-}
-
 .program-view {
   margin: auto;
   max-width: 1440px;
@@ -132,6 +128,14 @@ export default {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 50px;
+}
+.content-title::after {
+  height: 5px;
+  content: "";
+  display: block;
+  margin-top: 40px;
+  margin-bottom: 60px;
+  background-color: #232323;
 }
 
 .feature-container {
