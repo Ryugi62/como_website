@@ -114,61 +114,66 @@ export default {
 
 <style scoped>
 * {
-  /* border: 1px solid red; */
+  box-sizing: border-box; /* 모든 요소에 박스 크기 조정 */
 }
 
 .program-view {
   margin: auto;
   max-width: 1440px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* 약한 그림자 효과 */
+  border-radius: 10px; /* 약간 둥근 모서리 */
 }
 
 .content {
-  padding: 60px 20px;
-  text-align: center; /* 중앙 정렬 */
+  padding: 60px 40px;
+  text-align: center;
+  border-radius: 10px;
 }
 
 .content-title {
   font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 80px; /* 여백 */
+  margin-bottom: 50px;
 }
 
 .feature-container {
   display: flex;
-  margin-top: 20px;
-  justify-content: space-between; /* 항목 간격 */
+  justify-content: space-around; /* 항목 간격 조절 */
+  align-items: flex-start; /* 항목 상단 정렬 */
+  flex-wrap: wrap; /* 반응형 레이아웃 */
+  gap: 20px; /* 항목 간 간격 */
 }
 
 .feature-explanations,
 .features {
   flex: 1;
-  margin: 0 10px; /* 양쪽 여백 */
+  min-width: 300px; /* 최소 너비 설정 */
 }
 
 .feature-explanation,
 .feature {
-  margin: 10px 0;
-  display: flex;
-  padding: 15px;
-  background: #333;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  align-items: center;
+  background: #2c3e50; /* 진한 회색-파란색 배경 */
+  padding: 20px;
+  margin-bottom: 20px;
   border-radius: 8px;
-  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
 }
 
 .feature-explanation i,
 .feature i {
-  color: #ffc025; /* 아이콘 색상 */
-  margin-right: 10px;
+  color: #ffc107; /* 금색 아이콘 */
+  margin-right: 15px;
+  font-size: 1.5rem; /* 아이콘 크기 */
 }
 
 @media screen and (max-width: 768px) {
   .feature-container {
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
   .content-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
 }
 </style>
