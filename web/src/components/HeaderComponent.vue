@@ -167,6 +167,12 @@ export default {
   .burger-menu {
     display: flex;
   }
+
+  .burger-menu-link {
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+  }
 }
 
 .active {
