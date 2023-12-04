@@ -2,8 +2,9 @@
   <div class="download-view">
     <HeaderComponent />
 
-    <FooterComponent />
+    <body></body>
   </div>
+  <FooterComponent />
 </template>
 
 <script>
