@@ -17,10 +17,11 @@ a {
 html,
 body,
 #app {
+  color: white;
   margin: 0;
+  margin: auto;
   padding: 0;
   outline: 0;
-  color: white;
   background-color: #161616;
 }
 
