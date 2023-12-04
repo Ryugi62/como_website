@@ -4,6 +4,8 @@ import IntroView from "../views/IntroView.vue";
 import ProgramView from "../views/ProgramView.vue";
 import PricingView from "../views/PricingView.vue";
 import DownloadView from "../views/DownloadView.vue";
+import ReferralView from "../views/ReferralView.vue";
+import CounselView from "../views/CounselView.vue";
 import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import AdminView from "../views/AdminView.vue";
@@ -33,6 +35,16 @@ const routes = [
     path: "/download",
     name: "download",
     component: DownloadView,
+  },
+  {
+    path: "/referral",
+    name: "referral",
+    component: ReferralView,
+  },
+  {
+    path: "/counsel",
+    name: "counsel",
+    component: CounselView,
   },
   {
     path: "/login",
