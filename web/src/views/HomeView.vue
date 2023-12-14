@@ -1,7 +1,7 @@
 <template>
-  <div class="home">
-    <HeaderComponent />
+  <HeaderComponent />
 
+  <div class="home">
     <section class="container">
       <article class="text-content">
         <h2 class="text-title">
@@ -35,15 +35,14 @@ export default {
 <style scoped>
 .home {
   width: 100vw;
-  height: 100vh;
   display: flex;
+  margin-top: 100px;
   flex-direction: column;
 }
 
 .container {
-  width: 100%;
-  height: 100%;
-  margin: auto 20px;
+  margin: auto;
+  padding: 20px;
   display: flex;
   max-width: 1440px;
 }
