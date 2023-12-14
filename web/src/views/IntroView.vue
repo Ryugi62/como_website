@@ -1,7 +1,7 @@
 <template>
-  <div class="home">
-    <HeaderComponent />
+  <HeaderComponent />
 
+  <div class="home">
     <section class="about">
       <div class="content">
         <article class="text-content">
@@ -70,6 +70,7 @@
       </div>
     </section>
   </div>
+
   <FooterComponent />
 </template>
 

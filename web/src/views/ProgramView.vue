@@ -1,7 +1,7 @@
 <template>
-  <div class="program-view">
-    <HeaderComponent />
+  <HeaderComponent />
 
+  <div class="program-view">
     <div class="content">
       <h1 class="content-title">COMO PROGRAM의 특징</h1>
 
@@ -26,6 +26,7 @@
       </div>
     </div>
   </div>
+
   <FooterComponent />
 </template>
 
