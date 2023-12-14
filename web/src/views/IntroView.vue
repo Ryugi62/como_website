@@ -110,10 +110,10 @@ export default {
 section {
   width: 100%;
   height: 100%;
+  margin: 100px 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 0;
 }
 
 .content {
