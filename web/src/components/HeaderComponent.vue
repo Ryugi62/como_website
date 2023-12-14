@@ -17,12 +17,14 @@
       </RouterLink>
     </nav>
 
-    <RouterLink class="button como-button2 login-button" to="/login"
-      >로그인</RouterLink
-    >
-    <RouterLink class="button como-button1 register-button" to="/register"
-      >회원가입</RouterLink
-    >
+    <div class="user-button-box">
+      <RouterLink class="button como-button2 login-button" to="/login"
+        >로그인</RouterLink
+      >
+      <RouterLink class="button como-button1 register-button" to="/register"
+        >회원가입</RouterLink
+      >
+    </div>
 
     <i
       class="fa-solid fa-bars burger-button"
@@ -66,15 +68,14 @@ export default {
 <style scoped>
 .header {
   top: 0;
-  width: calc(100% - 40px);
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  background-color: #161616;
-  position: sticky;
-  max-width: 1440px;
   margin: auto;
   z-index: 100;
+  padding: 20px;
+  display: flex;
+  position: sticky;
+  max-width: 1440px;
+  align-items: center;
+  background-color: #161616;
 }
 
 .header-logo {
@@ -94,16 +95,11 @@ export default {
 }
 
 .nav {
-  margin-left: 50px;
+  gap: 20px;
   display: flex;
+  margin-left: 50px;
 }
 
-.nav-item {
-  margin-left: 20px;
-}
-.nav-item:not(:first-child) {
-  margin-left: 20px;
-}
 .nav-item:hover {
   color: #ff9f00;
 }
@@ -111,12 +107,10 @@ export default {
   color: #cb7e02;
 }
 
-.login-button {
+.user-button-box {
+  gap: 20px;
+  display: flex;
   margin-left: auto;
-}
-
-.register-button {
-  margin-left: 20px;
 }
 
 .burger-button {
