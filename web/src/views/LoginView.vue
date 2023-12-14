@@ -9,31 +9,33 @@
         <h1 class="form-title">Login</h1>
         <p class="form-description">Securely access your account</p>
 
-        <div class="input-wrapper">
-          <label for="username">Enter your email address</label>
-          <input
-            id="username"
-            v-model="username"
-            type="text"
-            class="input-field"
-            placeholder="Username"
-          />
-        </div>
+        <form @submit.prevent="handleLogin" class="login-form">
+          <div class="input-wrapper">
+            <label for="username">Enter your email address</label>
+            <input
+              id="username"
+              v-model="username"
+              type="text"
+              class="input-field"
+              placeholder="Username"
+            />
+          </div>
 
-        <div class="input-wrapper">
-          <label for="password">Enter your password</label>
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            class="input-field"
-            placeholder="Password"
-          />
-        </div>
+          <div class="input-wrapper">
+            <label for="password">Enter your password</label>
+            <input
+              id="password"
+              v-model="password"
+              type="password"
+              class="input-field"
+              placeholder="Password"
+            />
+          </div>
 
-        <button type="submit" class="button como-button1 submit-button">
-          Login
-        </button>
+          <button type="submit" class="button como-button1 submit-button">
+            Login
+          </button>
+        </form>
 
         <div class="registration-prompt">
           아직 회원이 아니신가요?
