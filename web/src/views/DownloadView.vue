@@ -79,12 +79,12 @@ export default {
 
 <style scoped>
 main {
-  margin: 0 auto;
-  padding: 20px;
-  max-width: 1440px;
-  display: flex;
-  flex-direction: column;
   gap: 50px;
+  margin: 100px auto;
+  padding: 20px;
+  display: flex;
+  max-width: 1440px;
+  flex-direction: column;
 }
 
 .section {
