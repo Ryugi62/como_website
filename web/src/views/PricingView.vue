@@ -1,51 +1,82 @@
 <template>
-  <div class="pricing-view">
-    <HeaderComponent />
+  <HeaderComponent />
+
+  <main>
     <section class="pricing-section">
-      <h1 class="pricing-title">Pricing</h1>
-      <p class="pricing-description">
-        Our pricing is not volatile, but it's not stagnant either, it's exactly
-        what it should be
-      </p>
-      <div class="pricing-cards">
-        <div
-          v-for="plan in pricingPlans"
-          :key="plan.name"
-          class="card-pricing"
-          :class="{ 'is-popular': plan.isPopular }"
-        >
-          <p class="plan-name">{{ plan.name }}</p>
-          <p class="plan-price">
-            <strong>{{ plan.price.toLocaleString("ko-KR") }}원</strong> / 월
+      <h1 class="section-title">Pricing</h1>
+
+      <div class="selections">
+        <!-- Bot Selection -->
+        <div class="selection">
+          <label for="bot">Select Bot</label>
+          <select id="bot" v-model="selectedBot">
+            <option v-for="bot in bots" :key="bot" :value="bot">
+              {{ bot }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Trading Method Selection -->
+        <div class="selection">
+          <label for="method">Trading Method</label>
+          <select id="method" v-model="selectedMethod">
+            <option
+              v-for="method in availableMethods"
+              :key="method"
+              :value="method"
+            >
+              {{ method }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Duration Selection -->
+        <div class="selection">
+          <label for="duration">Duration</label>
+          <select id="duration" v-model="selectedDuration">
+            <option
+              v-for="duration in availableDurations"
+              :key="duration"
+              :value="duration"
+            >
+              {{ duration }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Grades Section -->
+      <div class="grades-section">
+        <div v-for="grade in grades" :key="grade" class="grade">
+          <h2>{{ grade }}</h2>
+
+          <p>
+            Price:
+            <strong>
+              {{
+                currentPlanDetails
+                  ? currentPlanDetails[grade].price.toLocaleString()
+                  : ""
+              }}
+              원
+            </strong>
+            / 월
           </p>
-          <p class="plan-details">{{ plan.details }}</p>
-          <button class="button-get-started">Get Started</button>
-          <div v-if="plan.isPopular" class="label-popular">Most Popular</div>
+
+          <ul v-if="currentPlanDetails">
+            <li
+              v-for="feature in currentPlanDetails[grade].features"
+              :key="feature"
+            >
+              {{ feature }}
+            </li>
+          </ul>
         </div>
       </div>
     </section>
+  </main>
 
-    <section class="features-section">
-      <h1 class="features-title">Compare Features</h1>
-      <div class="features-cards">
-        <div v-for="plan in pricingPlans" :key="plan.name" class="card-feature">
-          <h2 class="plan-name">{{ plan.name }}</h2>
-          <div
-            v-for="feature in plan.features"
-            :key="feature.name"
-            class="feature-item"
-          >
-            <span v-if="feature.isAvailable" class="icon-check">
-              <i class="fas fa-check"></i>
-              {{ feature.name }}
-            </span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <FooterComponent />
-  </div>
+  <FooterComponent />
 </template>
 
 <script>
@@ -54,153 +85,921 @@ import FooterComponent from "@/components/FooterComponent.vue";
 
 export default {
   name: "PricingView",
+
   components: {
     HeaderComponent,
     FooterComponent,
   },
+
   data() {
+    const defaultFeatures = [
+      "DCA 매매",
+
+      "급등락 수익화 매매",
+
+      "코모 수익화 모드 매매",
+
+      "대량 봇 일시 가동 매매",
+
+      "벡데이터 활용 시뮬레이션",
+
+      "시뮬레이션 데이터 차트시각화",
+
+      "시간 설정 매매",
+
+      "텔레그램 알림기능",
+
+      "모바일 조작",
+
+      "복리매매",
+    ];
+
     return {
-      pricingPlans: [
-        {
-          name: "Basic",
-          price: 10000,
-          details: "For hobby projects or small teams.",
-          isPopular: false,
-          features: [
-            { name: "1 User", isAvailable: true },
-            { name: "Unlimited Projects", isAvailable: true },
-            { name: "2GB Storage", isAvailable: true },
-            { name: "Community Support", isAvailable: true },
-          ],
-        },
-        {
-          name: "Pro",
-          price: 1000000,
-          details: "For ambitious individuals.",
-          isPopular: true,
-          features: [
-            { name: "5 Users", isAvailable: true },
-            { name: "Unlimited Projects", isAvailable: true },
-            { name: "50GB Storage", isAvailable: true },
-            { name: "Community Support", isAvailable: true },
-          ],
-        },
-        {
-          name: "Business",
-          price: 100000000,
-          details: "For small to medium-sized businesses.",
-          isPopular: false,
-          features: [
-            { name: "10 Users", isAvailable: true },
-            { name: "Unlimited Projects", isAvailable: true },
-            { name: "100GB Storage", isAvailable: true },
-            { name: "Community Support", isAvailable: true },
-          ],
-        },
+      bots: [
+        "바이낸스 봇",
+        "업비트 봇",
+        "빗썸 봇",
+        "김프,아비트라지 봇",
+        "공지 봇",
       ],
+
+      methods: ["현물", "선물", "현물 + 선물"],
+      durations: ["1개월", "6개월", "12개월"],
+      grades: ["FREE", "BASIC", "EXPERT"],
+
+      selectedBot: "바이낸스 봇",
+      selectedMethod: "현물",
+      selectedDuration: "1개월",
+      selectedGrade: "FREE",
+
+      plans: {
+        "바이낸스 봇": {
+          현물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          선물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          "현물 + 선물": {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+        },
+
+        "업비트 봇": {
+          현물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          선물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          "현물 + 선물": {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+        },
+
+        "빗썸 봇": {
+          현물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          선물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          "현물 + 선물": {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+        },
+
+        "김프,아비트라지 봇": {
+          현물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          선물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          "현물 + 선물": {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+        },
+
+        "공지 봇": {
+          현물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          선물: {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+
+          "현물 + 선물": {
+            "1개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 10000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 20000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "6개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 50000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 100000,
+                features: [...defaultFeatures],
+              },
+            },
+
+            "12개월": {
+              FREE: {
+                price: 0,
+                features: [...defaultFeatures],
+              },
+              BASIC: {
+                price: 90000,
+                features: [...defaultFeatures],
+              },
+              EXPERT: {
+                price: 180000,
+                features: [...defaultFeatures],
+              },
+            },
+          },
+        },
+      },
     };
+  },
+
+  computed: {
+    availableMethods() {
+      return this.plans[this.selectedBot]
+        ? Object.keys(this.plans[this.selectedBot])
+        : [];
+    },
+
+    availableDurations() {
+      return this.selectedMethod
+        ? Object.keys(this.plans[this.selectedBot][this.selectedMethod])
+        : [];
+    },
+
+    currentPlanDetails() {
+      if (this.selectedBot && this.selectedMethod && this.selectedDuration) {
+        return this.plans[this.selectedBot][this.selectedMethod][
+          this.selectedDuration
+        ];
+      }
+      return null;
+    },
   },
 };
 </script>
 
 <style scoped>
-.pricing-section,
-.features-section {
-  margin: 0 auto;
-  padding: 20px;
-  max-width: 1440px;
+main {
+  padding: 40px;
+  margin: 50px auto;
+  max-width: 1200px;
+  background: #161616;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
 }
 
-.pricing-section {
+/* 섹션 제목 */
+.section-title {
+  font-size: 50px;
+  text-align: center;
+  color: #e0a527; /* 밝은 황금색 */
+  margin-bottom: 40px;
+}
+.section-title:after {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 3px;
+  background: #e0a527; /* 밝은 황금색 */
+  margin: 20px auto;
+  margin-bottom: 80px;
+}
+
+/* 선택 영역 */
+.selections {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px; /* 그리드 간격 조정 */
   margin-bottom: 40px;
 }
 
-.pricing-title,
-.features-title {
-  margin: 50px 0;
-  font-size: 2.5rem;
-  text-align: center;
-}
-
-.pricing-description {
-  font-size: 1.2rem;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.pricing-cards,
-.features-cards {
+.selection {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.card-pricing,
-.card-feature {
-  width: 300px;
-  margin: 10px;
-  padding: 20px;
-  position: relative;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-.card-pricing:nth-child(odd) {
-  background-color: #282828;
-}
-
-.card-feature .plan-name {
-  font-size: 1.8rem;
-  margin-bottom: 30px;
-}
-
-.card-pricing .plan-price {
-  margin-top: 40px;
-  margin-bottom: 15px;
-}
-
-.card-pricing .plan-price strong {
-  font-size: 2.5rem;
-  font-weight: bold;
-}
-
-.button-get-started {
-  width: 100%;
-  border: none;
-  cursor: pointer;
-  padding: 10px 20px;
-  margin-top: 50px;
-  transition: background-color 0.3s;
-  border-radius: 5px;
-  background-color: #ffc025;
-}
-.button-get-started:hover {
-  background-color: #ff9f00;
-}
-
-.label-popular {
-  top: 0;
-  right: 0;
-  color: #282828;
-  padding: 5px 10px;
-  position: absolute;
-  font-size: 0.85rem;
-  background: #ffc025;
-  border-radius: 5px;
-}
-
-.feature-item {
-  margin-bottom: 15px;
-}
-.feature-item .icon-check {
-  display: flex;
+  flex-direction: column;
   align-items: center;
 }
-.feature-item .icon-check i {
-  color: white;
-  padding: 5px;
-  margin-right: 10px;
+
+.selection label {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.selection select {
+  width: 100%;
+  padding: 12px;
   border-radius: 5px;
-  background-color: #ffc025;
+  font-size: 16px;
+  background-color: #292929;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 등급 섹션 */
+.grades-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px; /* 그리드 간격 조정 */
+  margin-bottom: 40px;
+}
+
+.grade {
+  flex-basis: 30%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background: #202020; /* 약간 밝은 배경 */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.grade h2 {
+  font-size: 24px;
+  color: #e0a527; /* 제목 색상 */
+  margin-bottom: 15px;
+}
+
+.grade p {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+.grade p:after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: #ffffff; /* 밝은 황금색 */
+  margin: 20px auto;
+  margin-bottom: 20px;
+}
+
+.grade strong {
+  font-size: 2rem;
+}
+
+.grade ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  margin-top: 40px;
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.grade li {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .selections,
+  .grades-section {
+    grid-template-columns: 1fr;
+    align-items: center;
+  }
+
+  .selection,
+  .grade {
+    width: 100%;
+    max-width: 400px;
+  }
 }
 </style>
