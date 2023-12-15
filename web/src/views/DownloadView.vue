@@ -140,6 +140,7 @@ main {
   transform: scale(1.1);
   font-weight: bold;
   background-color: #ffc025;
+  box-shadow: 0 0 10px 0 #ffc025c4;
 }
 
 .duration-select-section {
@@ -158,7 +159,7 @@ main {
 }
 
 .duration-text {
-  flex-grow: 1;
+  flex-grow: 0.8;
   display: flex;
   flex-direction: column;
 }
@@ -169,6 +170,7 @@ main {
   border: none;
   cursor: pointer;
   padding: 10px 20px;
+  flex-grow: 0.2;
   border-radius: 5px;
   background-color: #333333;
 }
