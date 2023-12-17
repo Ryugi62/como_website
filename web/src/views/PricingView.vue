@@ -71,6 +71,8 @@
               {{ feature }}
             </li>
           </ul>
+
+          <button class="button como-button1 buy-button">구독하기</button>
         </div>
       </div>
     </section>
@@ -984,9 +986,30 @@ main {
   display: flex;
   flex-direction: column;
 }
+.grade ul::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  margin: 20px auto;
+  background: #4c4c4c;
+  margin-bottom: 20px;
+}
 
 .grade li {
   margin-bottom: 10px;
+}
+
+.grade button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 20px;
+}
+.grade button:active {
+  transform: scale(0.95);
 }
 
 @media (max-width: 768px) {
