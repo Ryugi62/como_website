@@ -60,7 +60,7 @@ export default {
   },
   data() {
     return {
-      botList: ["SPOT", "FUTURE", "UPBIT", "BITHUMB", "ARBI", "NOTICE"],
+      botList: ["BINANCE", "UPBIT", "BITHUMB", "ARBI", "NOTICE"],
       activeBotIndex: 0,
       durations: [
         {
