@@ -75,7 +75,8 @@ export default {
   position: sticky;
   max-width: 1440px;
   align-items: center;
-  background-color: #161616;
+  backdrop-filter: blur(10px);
+  background-color: #161616c0;
 }
 
 .header-logo {
