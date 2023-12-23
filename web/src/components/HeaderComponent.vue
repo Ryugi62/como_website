@@ -75,7 +75,7 @@ export default {
   position: sticky;
   max-width: 1440px;
   align-items: center;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
   background-color: #161616c0;
 }
 
