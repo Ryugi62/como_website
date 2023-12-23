@@ -8,7 +8,12 @@
       <p>
         사랑을 나누세요! 친구를 추천하고 두 분 모두 한 달 무료 혜택을 받으세요.
       </p>
-      <button>추천 프로그램에 가입하기</button>
+      <button @click="openModal">추천 프로그램에 가입하기</button>
+      <ReferralModal
+        v-if="isModalVisible"
+        :isVisible="isModalVisible"
+        @close="isModalVisible = false"
+      />
     </section>
 
     <!-- 추천 링크 섹션 -->
@@ -69,13 +74,17 @@
 <script>
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
+import ReferralModal from "@/components/ReferralModal.vue";
 
 export default {
   name: "ReferralView",
+
   components: {
     HeaderComponent,
     FooterComponent,
+    ReferralModal,
   },
+
   data() {
     return {
       referralLink: null,
@@ -91,11 +100,17 @@ export default {
         // ... additional referral objects
       ],
       totalEarnings: 0,
+      isModalVisible: false,
     };
   },
+
   methods: {
     generateReferralLink() {
       // Method to generate a referral link
+    },
+
+    openModal() {
+      this.isModalVisible = true;
     },
   },
 };
@@ -193,7 +208,6 @@ main {
   display: flex;
   padding: 20px;
   margin-top: 40px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   justify-content: space-around;
 }
