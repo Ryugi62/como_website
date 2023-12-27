@@ -25,18 +25,14 @@
       </div>
     </section>
 
-    <section class="counsel remote-support">
-      <h1>원격 기술지원</h1>
-      <div class="counsel-list">
-        <div class="counsel-item remote">
-          <h3>원격 지원</h3>
-          <div class="counsel-content">
-            <h2>원격 지원을 위한 프로그램을 다운로드 받으세요.</h2>
-            <button>원격 지원 프로그램 다운로드</button>
-          </div>
-        </div>
+    <div class="remote remote-support">
+      <h3>원격 지원</h3>
+
+      <div class="remote-content">
+        <h2>원격 지원을 위한 프로그램을 다운로드 받으세요.</h2>
+        <button>원격 지원 프로그램 다운로드</button>
       </div>
-    </section>
+    </div>
 
     <section class="faq">
       <h1>자주 묻는 질문</h1>
@@ -187,7 +183,7 @@ main {
 
 .banner {
   height: 300px;
-  background-color: #005f73; /* Updated color for a modern look */
+  background-color: #005f73;
   color: #fff;
   display: flex;
   align-items: center;
@@ -208,7 +204,7 @@ main {
   flex: 1;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Lighter shadow for subtlety */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -216,25 +212,30 @@ main {
 
 .counsel-item:hover,
 .faq-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .counsel-item .counsel-content,
 .faq-item .faq-content {
   margin-top: 10px;
-  font-size: 18px; /* Slightly smaller font for content */
+  font-size: 18px;
 }
 
 .faq-item .faq-content {
   width: 100%;
-  color: #666; /* Softened color for content */
+  color: #666;
   padding-top: 10px;
-  border-top: 1px solid #e0e0e0; /* Lighter border for separation */
+  border-top: 1px solid #e0e0e0;
+}
+
+/* 짝수 faq-item마다 background color 변경 */
+.faq-item:nth-child(even) {
+  /* 조금 더 밝은 black */
+  background-color: #222;
 }
 
 .call,
-.remote,
 .email,
 .kakao {
   background: #e9e9e9;
@@ -248,30 +249,28 @@ main {
   background: #00bfa5;
 }
 
-.remote .counsel-content,
-.remote-support .counsel-item {
-  display: flex;
-  flex-direction: column;
+.remote {
+  background-color: #0096c7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 8px;
+  padding: 30px;
+  border-radius: 10px;
+  margin-top: 30px;
+  text-align: center;
 }
 
-.counsel-item button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background-color: #222222;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+.remote-item:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.counsel-item button:hover {
-  background-color: #333333; /* Darker shade on hover */
-  transform: scale(1.05); /* Slight increase in size on hover */
+.remote-content {
+  margin-top: 10px;
+  font-size: 16px;
 }
 
 .faq-arrow {
-  font-size: 1.5rem; /* Larger arrow for better visibility */
+  font-size: 1.5rem;
   transition: transform 0.3s ease;
 }
 
@@ -301,6 +300,23 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 22px; /* Increased font size for questions */
+  font-size: 22px;
+}
+
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: transform 0.3s ease;
+  background: #333;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+}
+button:hover {
+  transform: scale(1.05);
 }
 </style>
