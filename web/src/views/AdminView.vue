@@ -19,9 +19,6 @@
       <hr />
 
       <div class="selected-feature-content">
-        <h2 v-if="selectedFeature">{{ selectedFeature }}</h2>
-        <p v-if="selectedFeature">Content for {{ selectedFeature }}</p>
-
         <component v-if="currentComponent" :is="currentComponent" />
       </div>
     </div>
@@ -32,7 +29,6 @@
 import UserManagement from "@/components/admin/UserManagement.vue";
 import ProductManagement from "@/components/admin/ProductManagement.vue";
 import OrderManagement from "@/components/admin/OrderManagement.vue";
-import PointManagement from "@/components/admin/PointManagement.vue";
 import PostManagement from "@/components/admin/PostManagement.vue";
 import CommentManagement from "@/components/admin/CommentManagement.vue";
 
@@ -43,7 +39,6 @@ export default {
     UserManagement,
     ProductManagement,
     OrderManagement,
-    PointManagement,
     PostManagement,
     CommentManagement,
   },
