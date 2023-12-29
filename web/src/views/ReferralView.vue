@@ -186,6 +186,7 @@ main {
 .referral-link {
   font-size: 1.2em;
   margin-bottom: 20px;
+  word-wrap: break-word;
 }
 
 .referral-link {
@@ -232,7 +233,6 @@ main {
   margin-bottom: 15px; /* Consistent margin for paragraphs */
 }
 
-/* Table Styles */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -263,5 +263,49 @@ tbody tr:nth-child(odd) {
 
 tbody tr:hover {
   background-color: #333;
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 15px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+  }
+
+  .how-to-use-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .how-to-use-section .step {
+    flex-basis: 100%;
+    margin-bottom: 20px;
+  }
+
+  .banner-section h1 {
+    font-size: 2.5em;
+  }
+
+  .banner-section p {
+    font-size: 1.2em;
+  }
+}
+
+/* Media Query for Mobile Phones */
+@media (max-width: 480px) {
+  .banner-section h1 {
+    font-size: 2em;
+  }
+
+  .banner-section p,
+  .referral-section p,
+  .how-to-use-section p {
+    font-size: 1em;
+  }
+
+  .banner-section button {
+    padding: 10px 20px;
+    font-size: 1em;
+  }
 }
 </style>
