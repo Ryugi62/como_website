@@ -1,48 +1,52 @@
 <template>
-  <header class="header">
-    <RouterLink to="/" class="header-logo">
-      <i class="fa-brands fa-bitcoin header-icon"></i>
-      <span class="header-title">코모</span>
-    </RouterLink>
-
-    <nav class="nav">
-      <RouterLink
-        v-for="link in linkList"
-        :key="link.name"
-        :to="link.path"
-        class="nav-item"
-        :class="{ active: $route.path === link.path }"
-      >
-        {{ link.name }}
+  <div class="header-background">
+    <header class="header">
+      <RouterLink to="/" class="header-logo">
+        <i class="fa-brands fa-bitcoin header-icon"></i>
+        <span class="header-title">코모</span>
       </RouterLink>
-    </nav>
 
-    <div class="user-button-box">
-      <RouterLink class="button como-button2 login-button" to="/login"
-        >로그인</RouterLink
-      >
-      <RouterLink class="button como-button1 register-button" to="/register"
-        >회원가입</RouterLink
-      >
-    </div>
+      <nav class="nav">
+        <RouterLink
+          v-for="link in linkList"
+          :key="link.name"
+          :to="link.path"
+          class="nav-item"
+          :class="{ active: $route.path === link.path }"
+        >
+          {{ link.name }}
+        </RouterLink>
+      </nav>
 
-    <i
-      class="fa-solid fa-bars burger-button"
-      @click="burgerMenu = !burgerMenu"
-    ></i>
-    <div class="burger-menu" v-if="burgerMenu">
-      <RouterLink
-        v-for="link in linkList"
-        :key="link.name"
-        :to="link.path"
-        class="burger-menu-link"
-      >
-        {{ link.name }}
-      </RouterLink>
-      <RouterLink to="/login" class="burger-menu-link">로그인</RouterLink>
-      <RouterLink to="/register" class="burger-menu-link">회원가입</RouterLink>
-    </div>
-  </header>
+      <div class="user-button-box">
+        <RouterLink class="button como-button2 login-button" to="/login"
+          >로그인</RouterLink
+        >
+        <RouterLink class="button como-button1 register-button" to="/register"
+          >회원가입</RouterLink
+        >
+      </div>
+
+      <i
+        class="fa-solid fa-bars burger-button"
+        @click="burgerMenu = !burgerMenu"
+      ></i>
+      <div class="burger-menu" v-if="burgerMenu">
+        <RouterLink
+          v-for="link in linkList"
+          :key="link.name"
+          :to="link.path"
+          class="burger-menu-link"
+        >
+          {{ link.name }}
+        </RouterLink>
+        <RouterLink to="/login" class="burger-menu-link">로그인</RouterLink>
+        <RouterLink to="/register" class="burger-menu-link"
+          >회원가입</RouterLink
+        >
+      </div>
+    </header>
+  </div>
 </template>
 
 <script>
@@ -66,17 +70,20 @@ export default {
 </script>
 
 <style scoped>
-.header {
+.header-background {
+  position: sticky;
   top: 0;
-  margin: auto;
   z-index: 100;
+  background-color: #161616c0;
+  backdrop-filter: blur(20px);
+}
+
+.header {
+  margin: auto;
   padding: 20px;
   display: flex;
-  position: sticky;
   max-width: 1440px;
   align-items: center;
-  backdrop-filter: blur(20px);
-  background-color: #161616c0;
 }
 
 .header-logo {
