@@ -1,42 +1,35 @@
 <template>
   <HeaderComponent />
 
-  <main>
-    <section class="banner">
-      <h1>고객센터</h1>
+  <main class="main-container">
+    <section class="section-banner">
+      <h1 class="banner-title">고객센터</h1>
     </section>
 
-    <section class="counsel">
-      <h1>바로 상담 연결</h1>
+    <section class="section-counsel">
+      <h1 class="counsel-title">바로 상담 연결</h1>
       <div class="counsel-list">
         <div
           v-for="counsel in counselList"
           :key="counsel.title"
-          :class="['counsel-item', counsel.class]"
+          class="counsel-card"
         >
+          <div class="counsel-icon">{{ counsel.icon }}</div>
           <h3>{{ counsel.title }}</h3>
-          <div class="counsel-content">
-            <h2>{{ counsel.content.title }}</h2>
-            <button @click="connectCounsel(counsel.title)">
-              바로 상담 연결
-            </button>
-          </div>
+          <p>{{ counsel.content.title }}</p>
+          <button @click="connectCounsel(counsel.title)">바로 상담 연결</button>
         </div>
       </div>
     </section>
 
-    <div class="remote remote-support">
+    <div class="remote-support">
       <h3>원격 지원</h3>
-
-      <div class="remote-content">
-        <h2>원격 지원을 위한 프로그램을 다운로드 받으세요.</h2>
-        <button>원격 지원 프로그램 다운로드</button>
-      </div>
+      <p>원격 지원을 위한 프로그램을 다운로드 받으세요.</p>
+      <button>원격 지원 프로그램 다운로드</button>
     </div>
 
-    <section class="faq">
+    <section class="faq-section">
       <h1>자주 묻는 질문</h1>
-
       <div class="faq-list">
         <div
           v-for="(item, index) in faqList"
@@ -44,15 +37,9 @@
           class="faq-item"
           @click="toggleFaqItem(item)"
         >
-          <h3>
-            {{ `${index + 1} . ` }}
-            {{ item.question }}
-            <span class="faq-arrow" :class="{ 'arrow-up': item.isOpen }"
-              >▼</span
-            >
-          </h3>
-          <div class="faq-content" v-show="item.isOpen" @click.stop>
-            <h2>{{ item.answer }}</h2>
+          <h3>{{ `${index + 1}. ${item.question}` }}</h3>
+          <div v-if="item.isOpen" class="faq-content">
+            <p>{{ item.answer }}</p>
           </div>
         </div>
       </div>
@@ -156,167 +143,130 @@ export default {
   },
 
   methods: {
-    toggleFaqItem(item) {
+    toggleFaqItem(item, event) {
       item.isOpen = !item.isOpen;
+      this.$nextTick(() => {
+        if (item.isOpen && event) {
+          this.scrollToView(event.currentTarget);
+        }
+      });
     },
 
-    connectCounsel(title) {
-      console.log("Connecting to counsel with title:", title);
+    scrollToView(element) {
+      const elementRect = element.getBoundingClientRect();
+      const absoluteElementTop = elementRect.top + window.pageYOffset;
+      const middle = absoluteElementTop - window.innerHeight / 2;
+
+      window.scrollTo({
+        top: middle,
+        behavior: "smooth",
+      });
     },
+
+    connectCounsel(counselTitle) {
+      if (counselTitle === "전화 상담") {
+        window.open("tel:010-1234-5678");
+      } else if (counselTitle === "카카오톡 상담") {
+        window.open("https://pf.kakao.com/_xkxkxkxkxkxkxkxkxk");
+      } else if (counselTitle === "이메일 상담") {
+        window.open("mailto:
+    },
+
+    // ... any other methods ...
   },
 };
 </script>
 
 <style scoped>
-main {
+.main-container {
   margin: auto;
   padding: 20px;
-  max-width: 1440px;
-}
-
-.banner,
-.counsel,
-.faq {
-  margin-top: 60px;
-  text-align: center;
-}
-
-.banner {
-  height: 300px;
-  background-color: #005f73;
+  max-width: 1200px;
+  background-color: #161616;
   color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.section-banner {
+  background-color: #005f73;
+  text-align: center;
+  padding: 40px 0;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.section-counsel,
+.faq-section {
+  margin-bottom: 30px;
 }
 
 .counsel-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
-.counsel-item,
-.faq-item {
-  flex: 1;
-  padding: 30px;
+.counsel-card {
+  background: #222;
+  padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.3s ease;
 }
 
-.counsel-item:hover,
-.faq-item:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+.counsel-card:hover {
+  transform: translateY(-5px);
 }
 
-.counsel-item .counsel-content,
-.faq-item .faq-content {
-  margin-top: 10px;
-  font-size: 18px;
-}
-
-.faq-item .faq-content {
-  width: 100%;
-  color: #666;
-  padding-top: 10px;
-  border-top: 1px solid #e0e0e0;
-}
-
-/* 짝수 faq-item마다 background color 변경 */
-.faq-item:nth-child(even) {
-  /* 조금 더 밝은 black */
-  background-color: #222;
-}
-
-.call,
-.email,
-.kakao {
-  background: #e9e9e9;
-  color: #333;
-}
-
-.kakao {
-  background: #fee500;
-}
-.email {
-  background: #00bfa5;
-}
-
-.remote {
+.remote-support {
   background-color: #0096c7;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
   padding: 20px;
   border-radius: 8px;
-  padding: 30px;
-  border-radius: 10px;
-  margin-top: 30px;
   text-align: center;
 }
 
-.remote-item:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+.faq-section h1 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.remote-content {
+.faq-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.faq-item {
+  background: #333;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.faq-content {
   margin-top: 10px;
-  font-size: 16px;
-}
-
-.faq-arrow {
-  font-size: 1.5rem;
-  transition: transform 0.3s ease;
-}
-
-.arrow-up {
-  transform: rotate(180deg);
-}
-
-.faq {
-  color: white;
-}
-.faq-item h3 {
-  width: 100%;
-}
-
-.faq-item h2 {
-  padding: 20px;
-  font-size: 18px;
   text-align: left;
-  margin-top: 10px;
-}
-
-.faq-item .faq-content {
-  color: white;
-}
-
-.faq-item h3 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 22px;
+  color: #aaa;
 }
 
 button {
-  border: none;
-  outline: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: 600;
-  transition: transform 0.3s ease;
-  background: #333;
+  background-color: #444;
   color: white;
   padding: 10px 20px;
-  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
+
 button:hover {
-  transform: scale(1.05);
+  background-color: #555;
 }
 </style>
