@@ -1,4 +1,6 @@
 <template>
+  <HeaderComponent />
+
   <div class="admin-view">
     <div class="content">
       <h1 class="content-title">관리자 페이지</h1>
@@ -26,6 +28,7 @@
 </template>
 
 <script>
+import HeaderComponent from "@/components/HeaderComponent.vue";
 import UserManagement from "@/components/admin/UserManagement.vue";
 import ProductManagement from "@/components/admin/ProductManagement.vue";
 import OrderManagement from "@/components/admin/OrderManagement.vue";
@@ -36,6 +39,7 @@ export default {
   name: "AdminView",
 
   components: {
+    HeaderComponent,
     UserManagement,
     ProductManagement,
     OrderManagement,
