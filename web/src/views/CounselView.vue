@@ -2,10 +2,12 @@
   <HeaderComponent />
 
   <main class="main-container">
+    <!-- Banner Section -->
     <section class="section-banner">
       <h1 class="banner-title">고객센터</h1>
     </section>
 
+    <!-- Counsel Section -->
     <section class="section-counsel">
       <h1 class="counsel-title">바로 상담 연결</h1>
       <div class="counsel-list">
@@ -22,26 +24,30 @@
       </div>
     </section>
 
+    <!-- Remote Support Section -->
     <div class="remote-support">
       <h3>원격 지원</h3>
       <p>원격 지원을 위한 프로그램을 다운로드 받으세요.</p>
       <button>원격 지원 프로그램 다운로드</button>
     </div>
 
+    <!-- FAQ Section -->
     <section class="faq-section">
       <h1>자주 묻는 질문</h1>
       <div class="faq-list">
-        <div
+        <button
           v-for="(item, index) in faqList"
           :key="item.question"
           class="faq-item"
           @click="toggleFaqItem(item)"
+          :ref="`faqItem${item.question}`"
         >
           <h3>{{ `${index + 1}. ${item.question}` }}</h3>
           <div v-if="item.isOpen" class="faq-content">
+            <hr />
             <p>{{ item.answer }}</p>
           </div>
-        </div>
+        </button>
       </div>
     </section>
   </main>
@@ -55,14 +61,13 @@ import FooterComponent from "@/components/FooterComponent.vue";
 
 export default {
   name: "CounselView",
-
   components: {
     HeaderComponent,
     FooterComponent,
   },
-
   data() {
     return {
+      // Data for counsel list
       counselList: [
         {
           title: "전화 상담",
@@ -76,7 +81,7 @@ export default {
           content: { title: "como@test.email.com" },
         },
       ],
-
+      // Data for FAQ list
       faqList: [
         {
           question: "제 자금은 안전한가요?",
@@ -141,38 +146,30 @@ export default {
       ],
     };
   },
-
   methods: {
-    toggleFaqItem(item, event) {
+    toggleFaqItem(item) {
       item.isOpen = !item.isOpen;
-      this.$nextTick(() => {
-        if (item.isOpen && event) {
-          this.scrollToView(event.currentTarget);
-        }
-      });
+      if (item.isOpen) {
+        this.$nextTick(() => {
+          this.scrollToView(this.$refs[`faqItem${item.question}`]);
+        });
+      }
+      this.faqList = this.faqList.map((faq) =>
+        faq.question === item.question ? item : faq
+      );
     },
-
     scrollToView(element) {
-      const elementRect = element.getBoundingClientRect();
-      const absoluteElementTop = elementRect.top + window.pageYOffset;
-      const middle = absoluteElementTop - window.innerHeight / 2;
-
-      window.scrollTo({
-        top: middle,
-        behavior: "smooth",
-      });
+      if (element && element.length > 0) {
+        const elementRect = element[0].getBoundingClientRect();
+        const absoluteElementTop = elementRect.top + window.pageYOffset;
+        const middle =
+          absoluteElementTop - window.innerHeight / 2 + elementRect.height / 2;
+        window.scrollTo({ top: middle, behavior: "smooth" });
+      }
     },
-
-    connectCounsel(counselTitle) {
-      if (counselTitle === "전화 상담") {
-        window.open("tel:010-1234-5678");
-      } else if (counselTitle === "카카오톡 상담") {
-        window.open("https://pf.kakao.com/_xkxkxkxkxkxkxkxkxk");
-      } else if (counselTitle === "이메일 상담") {
-        window.open("mailto:
+    connectCounsel(title) {
+      console.log(title); // Implement your connection logic here
     },
-
-    // ... any other methods ...
   },
 };
 </script>
@@ -256,14 +253,25 @@ export default {
   color: #aaa;
 }
 
-button {
-  background-color: #444;
-  color: white;
-  padding: 10px 20px;
+.faq-item h3 {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.faq-content hr {
   border: none;
-  border-radius: 5px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #aaa;
+}
+
+button {
+  color: white;
+  border: none;
   cursor: pointer;
+  padding: 10px 20px;
   transition: background-color 0.3s ease;
+  border-radius: 5px;
+  background-color: #444;
 }
 
 button:hover {
