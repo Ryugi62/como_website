@@ -230,6 +230,7 @@ form input[type="email"] {
 
 .actions {
   display: flex;
+  gap: 10px;
 }
 .actions button {
   flex: 1;
