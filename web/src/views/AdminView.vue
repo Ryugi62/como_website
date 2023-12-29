@@ -62,11 +62,6 @@ export default {
           component: OrderManagement,
         },
         {
-          icon: "fas fa-coins",
-          title: "포인트 관리",
-          component: PointManagement,
-        },
-        {
           icon: "fas fa-clipboard-list",
           title: "게시글 관리",
           component: PostManagement,
