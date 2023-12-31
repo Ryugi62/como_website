@@ -10,6 +10,17 @@
         <p class="form-description">Create your new account</p>
 
         <div class="input-wrapper">
+          <label for="userId">Choose a userId</label>
+          <input
+            id="userId"
+            v-model="userId"
+            type="text"
+            class="input-field"
+            placeholder="User ID"
+          />
+        </div>
+
+        <div class="input-wrapper">
           <label for="email">Enter your email address</label>
           <input
             id="email"
@@ -21,9 +32,9 @@
         </div>
 
         <div class="input-wrapper">
-          <label for="new-password">Choose a password</label>
+          <label for="password">Choose a password</label>
           <input
-            id="new-password"
+            id="password"
             v-model="password"
             type="password"
             class="input-field"
@@ -42,11 +53,22 @@
           />
         </div>
 
+        <div class="input-wrapper">
+          <label for="phone">Enter your phone number</label>
+          <input
+            id="phone"
+            v-model="phone"
+            type="tel"
+            class="input-field"
+            placeholder="Phone Number"
+          />
+        </div>
+
         <button type="submit" class="button como-button1 submit-button">
           Register
         </button>
         <div class="registration-prompt">
-          이미 회원이신가요?
+          Already have an account?
           <router-link to="/login" class="register-link">Login</router-link>
         </div>
       </form>
@@ -59,20 +81,44 @@ export default {
   name: "RegisterView",
   data() {
     return {
+      userId: "",
       email: "",
       password: "",
       confirmPassword: "",
+      phone: "",
     };
   },
   methods: {
     handleRegistration() {
-      console.log(
-        "Registration attempted with:",
-        this.email,
-        this.password,
-        this.confirmPassword
-      );
-      // Implement registration logic here
+      // Check if passwords match
+      if (this.password !== this.confirmPassword) {
+        return alert("비밀번호가 일치하지 않습니다.");
+      }
+
+      console.log(`Registering user: ${this.userId}`);
+      console.log(`Email: ${this.email}`);
+      console.log(`Password: ${this.password}`);
+      console.log(`Phone: ${this.phone}`);
+
+      this.$axios
+        .post("/api/register", {
+          userId: this.userId,
+          email: this.email,
+          password: this.password,
+          phone: this.phone,
+        })
+        .then((response) => {
+          console.log("User registered successfully:", response.data);
+          this.$router.push("/login");
+        })
+        .catch((error) => {
+          if (error.response.status === 409) {
+            return alert("이미 사용 중인 아이디입니다.");
+          } else {
+            console.error(error);
+            alert("회원가입에 실패했습니다");
+          }
+        });
     },
   },
 };

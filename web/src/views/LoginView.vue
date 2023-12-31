@@ -11,13 +11,13 @@
 
         <form @submit.prevent="handleLogin" class="login-form">
           <div class="input-wrapper">
-            <label for="username">Enter your email address</label>
+            <label for="userId">Enter your email address</label>
             <input
-              id="username"
-              v-model="username"
+              id="userId"
+              v-model="userId"
               type="text"
               class="input-field"
-              placeholder="Username"
+              placeholder="userId"
             />
           </div>
 
@@ -53,15 +53,26 @@ export default {
   name: "LoginView",
   data() {
     return {
-      username: "",
+      userId: "",
       password: "",
     };
   },
   methods: {
     handleLogin() {
-      // Implement login logic here
-      console.log("Login attempted with:", this.username, this.password);
-      // Further implementation needed
+      this.$axios
+        .post("/api/login", {
+          userId: this.userId,
+          password: this.password,
+        })
+        .then((res) => {
+          console.log(res);
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          console.log("로그인 실패");
+
+          console.log(err);
+        });
     },
   },
 };

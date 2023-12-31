@@ -1,16 +1,35 @@
-// create como_backend
-const cors = require("cors");
+require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
+const userRoutes = require("./routes/user");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(cors()); // CORS 에러 해결
-app.use(express.static(__dirname + "/dist")); // .dist 폴더에 있는 파일들을 사용할 수 있도록 설정
+app.use(express.json());
+app.use(cors());
+app.use(express.static(__dirname + "/dist"));
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
 
-// index.html 파일을 사용할 수 있도록 설정
+app.use(
+  "/api",
+  (req, res, next) => {
+    console.log("API request received");
+    next();
+  },
+  userRoutes
+);
+
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/dist/index.html");
 });
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
