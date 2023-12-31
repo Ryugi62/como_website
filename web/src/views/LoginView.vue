@@ -57,22 +57,23 @@ export default {
       password: "",
     };
   },
+
   methods: {
-    handleLogin() {
-      this.$axios
-        .post("/api/login", {
+    async handleLogin() {
+      try {
+        const response = await this.$store.dispatch("login", {
           userId: this.userId,
           password: this.password,
-        })
-        .then((res) => {
-          console.log(res);
-          this.$router.push("/");
-        })
-        .catch((err) => {
-          console.log("로그인 실패");
-
-          console.log(err);
         });
+
+        console.log(response);
+
+        if (response) {
+          this.$router.push("/");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

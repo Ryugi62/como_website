@@ -19,18 +19,24 @@
       </nav>
 
       <div class="user-button-box">
-        <RouterLink class="button como-button2 login-button" to="/login"
-          >로그인</RouterLink
-        >
-        <RouterLink class="button como-button1 register-button" to="/register"
-          >회원가입</RouterLink
-        >
+        <template v-if="isLoggedIn">
+          <div @click="logout" class="button como-button2">로그아웃</div>
+          <RouterLink class="button como-button1" to="/mypage"
+            >마이페이지</RouterLink
+          >
+        </template>
+
+        <template v-else>
+          <RouterLink class="button como-button2" to="/login"
+            >로그인</RouterLink
+          >
+          <RouterLink class="button como-button1" to="/register"
+            >회원가입</RouterLink
+          >
+        </template>
       </div>
 
-      <i
-        class="fa-solid fa-bars burger-button"
-        @click="burgerMenu = !burgerMenu"
-      ></i>
+      <i class="fa-solid fa-bars burger-button" @click="toggleBurgerMenu"></i>
       <div class="burger-menu" v-if="burgerMenu">
         <RouterLink
           v-for="link in linkList"
@@ -40,10 +46,20 @@
         >
           {{ link.name }}
         </RouterLink>
-        <RouterLink to="/login" class="burger-menu-link">로그인</RouterLink>
-        <RouterLink to="/register" class="burger-menu-link"
-          >회원가입</RouterLink
-        >
+
+        <template v-if="!isLoggedIn">
+          <RouterLink to="/login" class="burger-menu-link">로그인</RouterLink>
+          <RouterLink to="/register" class="burger-menu-link"
+            >회원가입</RouterLink
+          >
+        </template>
+
+        <template v-else>
+          <div @click="logout" class="burger-menu-link">로그아웃</div>
+          <RouterLink to="/mypage" class="burger-menu-link"
+            >마이페이지</RouterLink
+          >
+        </template>
       </div>
     </header>
   </div>
@@ -65,6 +81,22 @@ export default {
         { name: "상담신청", path: "/counsel" },
       ],
     };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
+  },
+  methods: {
+    toggleBurgerMenu() {
+      this.burgerMenu = !this.burgerMenu;
+    },
+    logout() {
+      this.$store.dispatch("logout");
+
+      alert("로그아웃 되었습니다.");
+      this.$router.push("/");
+    },
   },
 };
 </script>

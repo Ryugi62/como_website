@@ -1,2 +1,4 @@
 // state.js
-export const state = {};
+export const state = {
+  loggedIn: false,
+};

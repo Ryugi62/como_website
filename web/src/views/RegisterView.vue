@@ -95,30 +95,46 @@ export default {
         return alert("비밀번호가 일치하지 않습니다.");
       }
 
-      console.log(`Registering user: ${this.userId}`);
-      console.log(`Email: ${this.email}`);
-      console.log(`Password: ${this.password}`);
-      console.log(`Phone: ${this.phone}`);
+      // Check if phone number is valid
+      if (!this.phone.match(/^\d{3}-\d{3,4}-\d{4}$/)) {
+        return alert("올바른 전화번호 형식이 아닙니다.");
+      }
 
-      this.$axios
-        .post("/api/register", {
-          userId: this.userId,
-          email: this.email,
-          password: this.password,
-          phone: this.phone,
-        })
-        .then((response) => {
-          console.log("User registered successfully:", response.data);
-          this.$router.push("/login");
-        })
-        .catch((error) => {
-          if (error.response.status === 409) {
-            return alert("이미 사용 중인 아이디입니다.");
-          } else {
-            console.error(error);
-            alert("회원가입에 실패했습니다");
-          }
-        });
+      // Check if email is valid
+      if (
+        !this.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+      ) {
+        return alert("올바른 이메일 형식이 아닙니다.");
+      }
+
+      // Check if userId is valid
+      if (!this.userId.match(/^[a-zA-Z0-9]{4,}$/)) {
+        return alert("아이디는 4자 이상이어야 합니다.");
+      }
+
+      // Check if password is valid
+      if (!this.password.match(/^[a-zA-Z0-9]{4,}$/)) {
+        return alert("비밀번호는 4자 이상이어야 합니다.");
+      }
+
+      const registrationData = {
+        userId: this.userId,
+        email: this.email,
+        password: this.password,
+        phone: this.phone,
+      };
+
+      try {
+        this.$store.dispatch("register", registrationData);
+
+        this.$router.push("/");
+      } catch (error) {
+        if (error.response.status === 409) {
+          alert("이미 존재하는 아이디입니다.");
+        } else {
+          alert("회원가입에 실패했습니다.");
+        }
+      }
     },
   },
 };
