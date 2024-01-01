@@ -1,65 +1,48 @@
 <template>
   <div class="header-background">
     <header class="header">
-      <RouterLink to="/" class="header-logo">
+      <router-link to="/" class="header-logo">
         <i class="fa-brands fa-bitcoin header-icon"></i>
         <span class="header-title">코모</span>
-      </RouterLink>
+      </router-link>
 
       <nav class="nav">
-        <RouterLink
-          v-for="link in linkList"
+        <router-link
+          v-for="link in visibleLinks"
           :key="link.name"
           :to="link.path"
           class="nav-item"
-          :class="{ active: $route.path === link.path }"
+          :class="{ active: isActiveLink(link.path) }"
         >
           {{ link.name }}
-        </RouterLink>
+        </router-link>
       </nav>
 
       <div class="user-button-box">
-        <template v-if="isLoggedIn">
-          <div @click="logout" class="button como-button2">로그아웃</div>
-          <RouterLink class="button como-button1" to="/mypage"
-            >마이페이지</RouterLink
-          >
-        </template>
-
-        <template v-else>
-          <RouterLink class="button como-button2" to="/login"
-            >로그인</RouterLink
-          >
-          <RouterLink class="button como-button1" to="/register"
-            >회원가입</RouterLink
-          >
-        </template>
+        <router-link
+          v-for="button in visibleButtons"
+          :key="button.name"
+          :to="button.path"
+          @click="button.action"
+          class="button"
+          :class="buttonClass(button.name)"
+        >
+          {{ button.name }}
+        </router-link>
       </div>
 
       <i class="fa-solid fa-bars burger-button" @click="toggleBurgerMenu"></i>
+
       <div class="burger-menu" v-if="burgerMenu">
-        <RouterLink
-          v-for="link in linkList"
+        <router-link
+          v-for="link in visibleLinksAndButtons"
           :key="link.name"
           :to="link.path"
           class="burger-menu-link"
+          :class="{ active: isActiveLink(link.path) }"
         >
           {{ link.name }}
-        </RouterLink>
-
-        <template v-if="!isLoggedIn">
-          <RouterLink to="/login" class="burger-menu-link">로그인</RouterLink>
-          <RouterLink to="/register" class="burger-menu-link"
-            >회원가입</RouterLink
-          >
-        </template>
-
-        <template v-else>
-          <div @click="logout" class="burger-menu-link">로그아웃</div>
-          <RouterLink to="/mypage" class="burger-menu-link"
-            >마이페이지</RouterLink
-          >
-        </template>
+        </router-link>
       </div>
     </header>
   </div>
@@ -68,34 +51,82 @@
 <script>
 export default {
   name: "HeaderComponent",
+
   data() {
     return {
       burgerMenu: false,
       linkList: [
-        { name: "홈", path: "/" },
-        { name: "회사소개", path: "/intro" },
-        { name: "프로그램 소개", path: "/program" },
-        { name: "상품가격", path: "/pricing" },
-        { name: "프로그램 다운로드", path: "/download" },
-        { name: "레퍼럴", path: "/referral" },
-        { name: "상담신청", path: "/counsel" },
+        { name: "홈", path: "/", requiresAuth: false },
+        { name: "회사소개", path: "/intro", requiresAuth: false },
+        { name: "프로그램 소개", path: "/program", requiresAuth: true }, // 로그인 필요
+        { name: "상품가격", path: "/pricing", requiresAuth: false },
+        { name: "프로그램 다운로드", path: "/download", requiresAuth: true }, // 로그인 필요
+        { name: "레퍼럴", path: "/referral", requiresAuth: true }, // 로그인 필요
+        { name: "상담신청", path: "/counsel", requiresAuth: false },
+      ],
+      userButtons: [
+        { name: "로그인", path: "/login", requiresAuth: false },
+        { name: "회원가입", path: "/register", requiresAuth: false },
+        {
+          name: "로그아웃",
+          path: "/",
+          action: this.$store.dispatch("logout"),
+        },
+        { name: "마이페이지", path: "/mypage", requiresAuth: true },
       ],
     };
   },
+
   computed: {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
     },
+
+    visibleLinks() {
+      return this.filterLinks(this.linkList);
+    },
+
+    visibleButtons() {
+      return this.filterLinks(this.userButtons, true);
+    },
+
+    visibleLinksAndButtons() {
+      return this.filterLinks([...this.linkList, ...this.userButtons]);
+    },
   },
+
   methods: {
     toggleBurgerMenu() {
       this.burgerMenu = !this.burgerMenu;
     },
-    logout() {
-      this.$store.dispatch("logout");
 
-      alert("로그아웃 되었습니다.");
-      this.$router.push("/");
+    isActiveLink(path) {
+      return this.$route.path === path;
+    },
+
+    buttonClass(name) {
+      return {
+        "como-button1": name === "마이페이지" || name === "회원가입",
+        "como-button2": name === "로그인" || name === "로그아웃",
+      };
+    },
+
+    filterLinks(links, isButton = false) {
+      return links.filter((link) => {
+        console.log("isLoggedIn:", this.isLoggedIn); // 로그인 상태 확인
+
+        if (isButton) {
+          return (
+            this.isLoggedIn === link.requiresAuth &&
+            this.$route.path !== link.path
+          );
+        } else {
+          return (
+            this.isLoggedIn === link.requiresAuth ||
+            this.$route.path === link.path
+          );
+        }
+      });
     },
   },
 };
@@ -206,6 +237,22 @@ export default {
     padding: 10px;
     color: white;
     text-decoration: none;
+  }
+
+  .burger-menu-link:hover {
+    color: #ff9f00;
+  }
+
+  .burger-menu-link:active {
+    color: #cb7e02;
+  }
+
+  .burger-menu-link:last-child {
+    margin-bottom: 10px;
+  }
+
+  .user-button-box {
+    display: none;
   }
 }
 
