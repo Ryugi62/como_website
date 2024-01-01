@@ -9,6 +9,7 @@ import CounselView from "../views/CounselView.vue";
 import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import AdminView from "../views/AdminView.vue";
+import MyPageView from "../views/MyPageView.vue";
 
 const routes = [
   {
@@ -55,6 +56,11 @@ const routes = [
     path: "/register",
     name: "register",
     component: RegisterView,
+  },
+  {
+    path: "/mypage",
+    name: "mypage",
+    component: MyPageView,
   },
   {
     path: "/admin",
