@@ -1,4 +1,4 @@
 // state.js
 export const state = {
-  loggedIn: false,
+  loggedIn: localStorage.getItem("isLoggedIn") === "true",
 };

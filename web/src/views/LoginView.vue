@@ -60,19 +60,15 @@ export default {
 
   methods: {
     async handleLogin() {
-      try {
-        const response = await this.$store.dispatch("login", {
-          userId: this.userId,
-          password: this.password,
-        });
+      const response = await this.$store.dispatch("login", {
+        userId: this.userId,
+        password: this.password,
+      });
 
-        console.log(response);
-
-        if (response) {
-          this.$router.push("/");
-        }
-      } catch (error) {
-        console.log(error);
+      if (response.status === 200) {
+        this.$router.push("/");
+      } else {
+        alert("로그인에 실패하였습니다.");
       }
     },
   },

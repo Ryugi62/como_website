@@ -7,6 +7,7 @@ import DownloadView from "../views/DownloadView.vue";
 import ReferralView from "../views/ReferralView.vue";
 import CounselView from "../views/CounselView.vue";
 import LoginView from "../views/LoginView.vue";
+import LogoutView from "../views/LogoutView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import AdminView from "../views/AdminView.vue";
 import MyPageView from "../views/MyPageView.vue";
@@ -51,6 +52,11 @@ const routes = [
     path: "/login",
     name: "login",
     component: LoginView,
+  },
+  {
+    path: "/logout",
+    name: "logout",
+    component: LogoutView,
   },
   {
     path: "/register",

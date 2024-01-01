@@ -22,9 +22,11 @@ export const actions = {
         commit("setLoggedIn", true);
       }
 
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Login failed:", error);
+
+      return error.response.data;
     }
   },
 
@@ -40,6 +42,7 @@ export const actions = {
   async checkLoginStatus({ commit }) {
     try {
       const response = await axios.get("/api/check-login-status");
+
       commit("setLoggedIn", response.data.loggedIn);
     } catch (error) {
       console.error("Check login status failed:", error);
