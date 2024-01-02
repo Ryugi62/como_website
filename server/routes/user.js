@@ -43,43 +43,41 @@ const validateRequiredFields = (fields) => (req, res, next) => {
 };
 
 // 회원 가입 라우트
-router.post("/register", async (req, res) => {
-  try {
-    const { userId, email, password, phone } = req.body;
+router.post(
+  "/register",
+  validateRequiredFields(["userId", "email", "password", "phone"]),
+  async (req, res) => {
+    try {
+      // 중복 사용자 확인
+      const existingUser = await db.query(
+        "SELECT * FROM users WHERE userId = ?",
+        [userId]
+      );
 
-    // 입력 정규화 및 유효성 검사
-    if (!userId || !email || !password || !phone) {
-      return res.status(400).send("필수 필드를 모두 채워주세요.");
+      if (existingUser.length > 0) {
+        return res.status(400).send("중복된 아이디가 존재합니다.");
+      }
+
+      // 비밀번호 해시
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await db.query(
+        "INSERT INTO users (userId, email, password, phone) VALUES (?, ?, ?, ?)",
+        [userId, email, hashedPassword, phone]
+      );
+
+      logger.log("success", "회원가입 성공", { userId, email, phone });
+      res.status(200).send("회원가입 성공");
+    } catch (error) {
+      logger.log("error", `회원가입 오류`, {
+        error: error.message,
+        userId,
+        email,
+        phone,
+      });
+      res.status(500).send(`회원가입 오류: ${error.message}`);
     }
-
-    // 중복 사용자 확인
-    const existingUser = await db.query(
-      "SELECT * FROM users WHERE userId = ?",
-      [userId]
-    );
-    if (existingUser.length > 0) {
-      return res.status(400).send("중복된 아이디가 존재합니다.");
-    }
-
-    // 비밀번호 해시
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await db.query(
-      "INSERT INTO users (userId, email, password, phone) VALUES (?, ?, ?, ?)",
-      [userId, email, hashedPassword, phone]
-    );
-
-    logger.log("success", "회원가입 성공", { userId, email, phone });
-    res.status(200).send("회원가입 성공");
-  } catch (error) {
-    logger.log("error", `회원가입 오류`, {
-      error: error.message,
-      userId,
-      email,
-      phone,
-    });
-    res.status(500).send(`회원가입 오류: ${error.message}`);
   }
-});
+);
 
 // 로그인 라우트
 router.post(

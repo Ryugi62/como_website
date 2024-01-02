@@ -111,6 +111,29 @@ export default {
   },
   methods: {
     handleRegistration() {
+      if (!this.checkForm()) {
+        return;
+      }
+
+      const registrationData = {
+        userId: this.userId,
+        email: this.email,
+        password: this.password,
+        phone: this.phone,
+      };
+
+      try {
+        this.$store.dispatch("register", registrationData);
+      } catch (error) {
+        if (error.response.status === 409) {
+          alert("이미 존재하는 아이디입니다.");
+        } else {
+          alert("회원가입에 실패했습니다.");
+        }
+      }
+    },
+
+    checkForm() {
       // Check if passwords match
       if (this.password !== this.confirmPassword) {
         return alert("비밀번호가 일치하지 않습니다.");
@@ -138,25 +161,6 @@ export default {
       // Check if password is valid
       if (!this.password.match(/^[a-zA-Z0-9]{4,}$/)) {
         return alert("비밀번호는 4자 이상이어야 합니다.");
-      }
-
-      const registrationData = {
-        userId: this.userId,
-        email: this.email,
-        password: this.password,
-        phone: this.phone,
-      };
-
-      try {
-        this.$store.dispatch("register", registrationData);
-
-        this.$router.push("/");
-      } catch (error) {
-        if (error.response.status === 409) {
-          alert("이미 존재하는 아이디입니다.");
-        } else {
-          alert("회원가입에 실패했습니다.");
-        }
       }
     },
   },
