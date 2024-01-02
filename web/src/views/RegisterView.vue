@@ -55,13 +55,31 @@
 
         <div class="input-wrapper">
           <label for="phone">Enter your phone number</label>
-          <input
-            id="phone"
-            v-model="phone"
-            type="tel"
-            class="input-field"
-            placeholder="Phone Number"
-          />
+          <div class="phone-input">
+            <input
+              id="phone1"
+              v-model="phone1"
+              type="tel"
+              class="input-field"
+              placeholder="XXX"
+            />
+            <span>-</span>
+            <input
+              id="phone2"
+              v-model="phone2"
+              type="tel"
+              class="input-field"
+              placeholder="XXXX"
+            />
+            <span>-</span>
+            <input
+              id="phone3"
+              v-model="phone3"
+              type="tel"
+              class="input-field"
+              placeholder="XXXX"
+            />
+          </div>
         </div>
 
         <button type="submit" class="button como-button1 submit-button">
@@ -86,6 +104,9 @@ export default {
       password: "",
       confirmPassword: "",
       phone: "",
+      phone1: "",
+      phone2: "",
+      phone3: "",
     };
   },
   methods: {
@@ -95,8 +116,10 @@ export default {
         return alert("비밀번호가 일치하지 않습니다.");
       }
 
+      // Combine phone number parts
+      this.phone = `${this.phone1}-${this.phone2}-${this.phone3}`;
       // Check if phone number is valid
-      if (!this.phone.match(/^\d{3}-\d{3,4}-\d{4}$/)) {
+      if (!this.phone.match(/^\d{2,3}-\d{3,4}-\d{3,4}$/)) {
         return alert("올바른 전화번호 형식이 아닙니다.");
       }
 
@@ -202,6 +225,12 @@ export default {
 .input-wrapper label {
   display: block;
   margin-bottom: 0.5rem;
+}
+
+.phone-input {
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .input-field {
