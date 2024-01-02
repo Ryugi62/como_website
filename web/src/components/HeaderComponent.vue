@@ -67,11 +67,7 @@ export default {
       userButtons: [
         { name: "로그인", path: "/login", requiresAuth: false },
         { name: "회원가입", path: "/register", requiresAuth: false },
-        {
-          name: "로그아웃",
-          path: "/",
-          action: this.$store.dispatch("logout"),
-        },
+        { name: "로그아웃", path: "/logout", requiresAuth: true },
         { name: "마이페이지", path: "/mypage", requiresAuth: true },
       ],
     };
@@ -91,7 +87,10 @@ export default {
     },
 
     visibleLinksAndButtons() {
-      return this.filterLinks([...this.linkList, ...this.userButtons]);
+      const links = this.filterLinks(this.linkList);
+      const buttons = this.filterLinks(this.userButtons, true);
+
+      return [...links, ...buttons];
     },
   },
 
@@ -113,18 +112,18 @@ export default {
 
     filterLinks(links, isButton = false) {
       return links.filter((link) => {
-        console.log("isLoggedIn:", this.isLoggedIn); // 로그인 상태 확인
-
         if (isButton) {
-          return (
-            this.isLoggedIn === link.requiresAuth &&
-            this.$route.path !== link.path
-          );
+          if (link.name === "로그인" || link.name === "회원가입") {
+            return !this.isLoggedIn;
+          } else {
+            return this.isLoggedIn;
+          }
         } else {
-          return (
-            this.isLoggedIn === link.requiresAuth ||
-            this.$route.path === link.path
-          );
+          if (link.requiresAuth) {
+            return this.isLoggedIn;
+          } else {
+            return true;
+          }
         }
       });
     },
