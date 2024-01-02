@@ -1,5 +1,5 @@
 // state.js
 export const state = {
-  // 세션 스토리지에 저장된 로그인 상태를 가져옴
-  loggedIn: localStorage.getItem("loggedIn") || false,
+  // 로그인 상태를 세션 스토리지에서 가져옴 (없으면 false)
+  loggedIn: localStorage.getItem("loggedIn") === "true",
 };
