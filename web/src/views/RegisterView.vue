@@ -11,13 +11,22 @@
 
         <div class="input-wrapper">
           <label for="userId">Choose a userId</label>
-          <input
-            id="userId"
-            v-model="userId"
-            type="text"
-            class="input-field"
-            placeholder="User ID"
-          />
+          <div class="userid-input">
+            <input
+              id="userId"
+              v-model="userId"
+              type="text"
+              class="input-field"
+              placeholder="User ID"
+              @blur="checkUserIdAvailability"
+            />
+          </div>
+          <span
+            v-if="userIdMessage"
+            class="message"
+            :class="{ error: !isUserIdAvailable }"
+            >{{ userIdMessage }}</span
+          >
         </div>
 
         <div class="input-wrapper">
@@ -82,9 +91,7 @@
           </div>
         </div>
 
-        <button type="submit" class="button como-button1 submit-button">
-          Register
-        </button>
+        <button type="submit" class="button submit-button">Register</button>
         <div class="registration-prompt">
           Already have an account?
           <router-link to="/login" class="register-link">Login</router-link>
@@ -103,64 +110,118 @@ export default {
       email: "",
       password: "",
       confirmPassword: "",
-      phone: "",
       phone1: "",
       phone2: "",
       phone3: "",
+      isUserIdAvailable: null,
+      userIdMessage: "",
     };
   },
   methods: {
-    handleRegistration() {
-      if (!this.checkForm()) {
-        return;
-      }
-
-      const registrationData = {
-        userId: this.userId,
-        email: this.email,
-        password: this.password,
-        phone: this.phone,
-      };
+    async handleRegistration() {
+      if (!this.validateForm()) return;
 
       try {
-        this.$store.dispatch("register", registrationData);
-      } catch (error) {
-        if (error.response.status === 409) {
-          alert("이미 존재하는 아이디입니다.");
+        const registrationData = {
+          userId: this.userId,
+          email: this.email,
+          password: this.password,
+          phone: `${this.phone1}-${this.phone2}-${this.phone3}`,
+        };
+
+        const isRegistered = await this.$store.dispatch(
+          "register",
+          registrationData
+        );
+
+        if (isRegistered) {
+          alert("회원가입에 성공했습니다.");
+          this.$router.push("/login");
         } else {
           alert("회원가입에 실패했습니다.");
         }
+      } catch (error) {
+        alert("회원가입에 실패했습니다.");
       }
     },
 
-    checkForm() {
-      // Check if passwords match
-      if (this.password !== this.confirmPassword) {
-        return alert("비밀번호가 일치하지 않습니다.");
+    validateForm() {
+      if (!this.userId) {
+        alert("아이디를 입력해주세요.");
+        return false;
+      } else if (this.isUserIdAvailable !== true) {
+        alert("아이디 중복확인을 해주세요.");
+        return false;
+      } else if (this.userId.length < 4 || this.userId.length > 20) {
+        alert("아이디는 4자 이상 20자 이하로 입력해주세요.");
+        return false;
+      } else if (!/^[a-z0-9-_]{4,20}$/.test(this.userId)) {
+        alert("아이디는 영문 소문자, 숫자, 특수기호(_)(-)만 사용 가능합니다.");
+        return false;
       }
 
-      // Combine phone number parts
-      this.phone = `${this.phone1}-${this.phone2}-${this.phone3}`;
-      // Check if phone number is valid
-      if (!this.phone.match(/^\d{2,3}-\d{3,4}-\d{3,4}$/)) {
-        return alert("올바른 전화번호 형식이 아닙니다.");
+      if (!this.email) {
+        alert("이메일을 입력해주세요.");
+        return false;
+      } else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(this.email)) {
+        alert("이메일 형식이 올바르지 않습니다.");
+        return false;
       }
 
-      // Check if email is valid
-      if (
-        !this.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+      if (!this.password) {
+        alert("비밀번호를 입력해주세요.");
+        return false;
+      } else if (this.password.length < 8 || this.password.length > 20) {
+        alert("비밀번호는 8자 이상 20자 이하로 입력해주세요.");
+        return false;
+      } else if (
+        !/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/.test(
+          this.password
+        )
       ) {
-        return alert("올바른 이메일 형식이 아닙니다.");
+        alert(
+          "비밀번호는 영문자, 숫자, 특수문자를 모두 포함해야 합니다. (공백은 사용할 수 없습니다.)"
+        );
+        return false;
+      } else if (this.password !== this.confirmPassword) {
+        alert("비밀번호가 일치하지 않습니다.");
+        return false;
       }
 
-      // Check if userId is valid
-      if (!this.userId.match(/^[a-zA-Z0-9]{4,}$/)) {
-        return alert("아이디는 4자 이상이어야 합니다.");
+      if (!this.phone1 || !this.phone2 || !this.phone3) {
+        alert("전화번호를 입력해주세요.");
+        return false;
+      } else if (
+        !/^[0-9]{3}$/.test(this.phone1) ||
+        !/^[0-9]{4}$/.test(this.phone2) ||
+        !/^[0-9]{4}$/.test(this.phone3)
+      ) {
+        alert("전화번호 형식이 올바르지 않습니다.");
+        return false;
       }
 
-      // Check if password is valid
-      if (!this.password.match(/^[a-zA-Z0-9]{4,}$/)) {
-        return alert("비밀번호는 4자 이상이어야 합니다.");
+      return true;
+    },
+
+    async checkUserIdAvailability() {
+      if (!this.userId) {
+        this.isUserIdAvailable = null;
+        this.userIdMessage = "";
+        return;
+      }
+      try {
+        const isAvailable = await this.$store.dispatch(
+          "checkUserIdAvailability",
+          this.userId
+        );
+
+        this.isUserIdAvailable = isAvailable;
+        this.userIdMessage = isAvailable
+          ? "사용 가능한 아이디입니다."
+          : "이미 존재하는 아이디입니다.";
+      } catch (error) {
+        this.isUserIdAvailable = false;
+        this.userIdMessage = "아이디 확인 중 오류가 발생했습니다.";
       }
     },
   },
@@ -270,6 +331,17 @@ export default {
 
 .register-link:active {
   color: #cb7e02;
+}
+
+.message {
+  /* 초록 */
+  color: #00ff00;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.error {
+  color: red;
 }
 
 @media (max-width: 768px) {
