@@ -121,10 +121,5 @@ router.get("/logout", (req, res) => {
   logger.log("success", "로그아웃 성공");
 });
 
-// 로그인 상태 확인 라우트
-router.get("/check-login-status", checkLoggedIn, (req, res) => {
-  res.status(200).send(req.session.userId);
-});
-
 // 라우터 내보내기
 module.exports = router;
