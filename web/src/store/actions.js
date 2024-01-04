@@ -19,7 +19,6 @@ export const actions = {
 
       // if status code is 200, then commit
       if (response.status === 200) {
-        commit("setLoggedIn", true);
         return true;
       }
 
