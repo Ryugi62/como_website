@@ -67,8 +67,12 @@ export default {
       userButtons: [
         { name: "로그인", path: "/login", requiresAuth: false },
         { name: "회원가입", path: "/register", requiresAuth: false },
+        {
+          name: this.$store.getters.userId + "님",
+          path: "/mypage",
+          requiresAuth: true,
+        },
         { name: "로그아웃", path: "/logout", requiresAuth: true },
-        { name: "마이페이지", path: "/mypage", requiresAuth: true },
       ],
     };
   },
@@ -105,8 +109,9 @@ export default {
 
     buttonClass(name) {
       return {
-        "como-button1": name === "마이페이지" || name === "회원가입",
+        "como-button1": name === "회원가입",
         "como-button2": name === "로그인" || name === "로그아웃",
+        "mypage-button": name === this.$store.getters.userId + "님",
       };
     },
 
@@ -181,6 +186,20 @@ export default {
   gap: 20px;
   display: flex;
   margin-left: auto;
+}
+
+.mypage-button {
+  color: #ffc025;
+  padding-top: 13px;
+  padding-left: 0;
+  padding-right: 0;
+}
+.mypage-button:hover {
+  color: #ff9f00;
+  text-decoration: underline;
+}
+.mypage-button:active {
+  color: #cb7e02;
 }
 
 .burger-button {
