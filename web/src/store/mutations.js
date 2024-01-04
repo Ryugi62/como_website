@@ -5,4 +5,9 @@ export const mutations = {
     state.loggedIn = value;
     localStorage.setItem("loggedIn", value);
   },
+
+  setUser(state, value) {
+    state.user = value;
+    localStorage.setItem("user", JSON.stringify(value));
+  },
 };

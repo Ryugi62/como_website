@@ -21,6 +21,8 @@ router.post(
   checkDuplicateUserId,
   registerUser
 );
+// 계정 삭제 라우트
+router.post("/deleteUser", validateFields(["userId", "password"]), deleteUser);
 router.post("/login", validateFields(["userId", "password"]), loginUser);
 router.get("/logout", logoutUser);
 
@@ -109,13 +111,21 @@ async function loginUser(req, res) {
     if (!isMatch) {
       return res.status(400).send("비밀번호가 일치하지 않습니다.");
     }
-    req.session.userId = user.userId;
-    req.session.isAdmin = user.isAdmin;
-    res.status(200).send("로그인 성공");
+
+    res.status(200).send(removePassword(user));
   } catch (error) {
     logger.log("error", `로그인 오류: ${error.message}`, { userId });
     res.status(500).send(`로그인 오류: ${error.message}`);
   }
+}
+
+// 유저 정보를 보낼때 보안을 위해
+// 비밀번호를 제거하는 함수
+function removePassword(user) {
+  const newUser = { ...user };
+  delete newUser.id;
+  delete newUser.password;
+  return newUser;
 }
 
 // 로그아웃 로직
@@ -139,5 +149,32 @@ async function checkDuplicateUserId(req, res, next) {
   } catch (error) {
     logger.log("error", `아이디 중복 확인 오류: ${error.message}`, { userId });
     res.status(500).send(`아이디 중복 확인 오류: ${error.message}`);
+  }
+}
+
+// 계정 삭제 로직
+async function deleteUser(req, res) {
+  try {
+    const { userId, password } = req.body;
+
+    const [user] = await db.query("SELECT * FROM users WHERE userId = ?", [
+      userId,
+    ]);
+
+    if (!user) {
+      return res.status(400).send("아이디가 존재하지 않습니다.");
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).send("비밀번호가 일치하지 않습니다.");
+    }
+
+    await db.query("DELETE FROM users WHERE userId = ?", [userId]);
+    logger.log("success", "계정 삭제 성공", { userId });
+    res.status(200).send("계정 삭제 성공");
+  } catch (error) {
+    logger.log("error", `계정 삭제 오류: ${error.message}`, { userId });
+    res.status(500).send(`계정 삭제 오류: ${error.message}`);
   }
 }

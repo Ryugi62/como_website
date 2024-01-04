@@ -222,13 +222,19 @@ export default {
       this.showDeleteConfirmation = true;
     },
 
-    confirmDeleteAccount() {
-      if (this.deletePassword === this.user.password) {
+    async confirmDeleteAccount() {
+      const user = {
+        userId: this.$store.state.user.userId,
+        password: this.deletePassword,
+      };
+
+      const result = this.$store.dispatch("deleteUser", user);
+
+      if (result) {
         alert("계정이 삭제되었습니다.");
-        this.showDeleteConfirmation = false;
         this.$router.push("/");
       } else {
-        this.deleteError = "비밀번호가 올바르지 않습니다.";
+        this.deleteError = "계정 삭제에 실패했습니다.";
       }
     },
   },

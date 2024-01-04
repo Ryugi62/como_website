@@ -29,12 +29,34 @@ export const actions = {
     }
   },
 
+  async deleteUser({ commit }, credentials) {
+    try {
+      console.log("credentials:", credentials);
+
+      const response = await axios.post("/api/deleteUser", credentials);
+
+      if (response.status === 200) {
+        commit("setLoggedIn", false);
+        commit("setUser", null);
+
+        return true;
+      }
+    } catch (error) {
+      console.error("Delete user failed:", error);
+
+      return false;
+    }
+  },
+
   async login({ commit }, credentials) {
     try {
       const response = await axios.post("/api/login", credentials);
 
       if (response.status === 200) {
         commit("setLoggedIn", true);
+        commit("setUser", response.data);
+
+        return true;
       }
 
       return response;
