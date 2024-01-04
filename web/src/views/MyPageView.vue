@@ -46,6 +46,40 @@
               {{ confirmNewPasswordError }}
             </p>
           </div>
+
+          <div class="input-group">
+            <label for="phone">전화번호:</label>
+            <div class="phone-input-group">
+              <input
+                type="tel"
+                class="phone"
+                v-model="phone1"
+                maxlength="3"
+                @keydown.enter.prevent
+                @blur="validatePhone"
+              />
+              <span>-</span>
+              <input
+                type="tel"
+                class="phone"
+                v-model="phone2"
+                maxlength="4"
+                @keydown.enter.prevent
+                @blur="validatePhone"
+              />
+              <span>-</span>
+              <input
+                type="tel"
+                class="phone"
+                v-model="phone3"
+                maxlength="4"
+                @keydown.enter.prevent
+                @blur="validatePhone"
+              />
+            </div>
+
+            <p class="error-message" v-if="phoneError">{{ phoneError }}</p>
+          </div>
         </section>
 
         <section class="section">
@@ -134,7 +168,11 @@ export default {
         email: "",
         password: "",
         subscriptions: [],
+        phone: "",
       },
+      phone1: "",
+      phone2: "",
+      phone3: "",
       newPassword: "",
       confirmNewPassword: "",
       confirmPassword: "",
@@ -146,6 +184,7 @@ export default {
       showDeleteConfirmation: false,
       deletePassword: "",
       deleteError: "",
+      phoneError: "",
     };
   },
 
@@ -154,7 +193,15 @@ export default {
       email: this.$store.getters.userEmail,
       password: "",
       subscriptions: this.$store.getters.userSubscriptions || [],
+      phone: this.$store.getters.userPhone,
     };
+
+    if (this.user.phone) {
+      const phone = this.user.phone.split("-");
+      this.phone1 = phone[0];
+      this.phone2 = phone[1];
+      this.phone3 = phone[2];
+    }
   },
 
   methods: {
@@ -162,13 +209,17 @@ export default {
       this.validateEmail();
       this.validateNewPasswordStrength();
       this.validateConfirmNewPassword();
+      this.validatePhone();
 
       if (
         !this.emailError &&
         !this.passwordError &&
         !this.confirmPasswordError &&
         !this.newPasswordError &&
-        !this.confirmNewPasswordError
+        !this.confirmNewPasswordError &&
+        !this.phoneError &&
+        this.user.email !== "" &&
+        this.user.phone !== ""
       ) {
         // 비밀번호 변경 로직 추가
         if (this.newPassword === this.confirmNewPassword) {
@@ -176,9 +227,14 @@ export default {
             userId: this.$store.state.user.userId,
             email: this.user.email,
             newPassword: this.newPassword,
+            phone: this.user.phone,
           };
 
+          console.log(user);
+
           const result = this.$store.dispatch("changeUser", user);
+
+          console.log(result);
 
           if (result) {
             alert("프로필이 업데이트되었습니다.");
@@ -220,6 +276,18 @@ export default {
       this.confirmNewPasswordError =
         this.confirmNewPassword !== this.newPassword
           ? "비밀번호가 일치하지 않습니다."
+          : "";
+    },
+
+    validatePhone() {
+      const phoneRegex = /^\d{2,3}-\d{3,4}-\d{4}$/;
+      const phone = `${this.phone1}-${this.phone2}-${this.phone3}`;
+      this.user.phone = phone;
+      this.phoneError =
+        this.user.phone === ""
+          ? ""
+          : !phoneRegex.test(this.user.phone)
+          ? "올바른 전화번호를 입력하세요."
           : "";
     },
 
@@ -328,6 +396,19 @@ export default {
 .input-group input:focus,
 .input-group select:focus {
   border-color: #ffc025;
+}
+
+.phone-input-group {
+  display: flex;
+  gap: 10px;
+}
+.phone-input-group span {
+  display: flex;
+  align-items: center;
+}
+.phone-input-group input {
+  flex-grow: 1;
+  max-width: 100px;
 }
 
 /* 현재 구독 상품 스타일 */

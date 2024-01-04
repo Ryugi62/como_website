@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const bcrypt = require("bcrypt");
 const db = require("../config/database");
@@ -6,15 +5,38 @@ const session = require("express-session");
 const helmet = require("helmet");
 const logger = require("./logger");
 
+require("dotenv").config();
+
 const router = express.Router();
-setupMiddlewares(router);
+
+// 미들웨어 설정
+function setupMiddlewares(router) {
+  router.use(helmet());
+  router.use(sessionMiddleware());
+}
+
+// 세션 미들웨어
+function sessionMiddleware() {
+  return session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  });
+}
 
 // 필드 유효성 검사 미들웨어
 function validateFields(requiredFields) {
   return function (req, res, next) {
     for (let field of requiredFields) {
       if (!req.body[field]) {
-        return res.status(400).send(`'${field}' 필드가 필요합니다.`);
+        const message = `'${field}' 필드가 필요합니다.`;
+        console.log(message);
+        return res.status(400).send(message);
       }
     }
     next();
@@ -41,36 +63,17 @@ async function checkDuplicateUserId(req, res, next) {
     }
     next();
   } catch (error) {
-    logger.log("error", `아이디 중복 확인 오류: ${error.message}`, { userId });
-    res.status(500).send(`아이디 중복 확인 오류: ${error.message}`);
+    const errorMessage = `아이디 중복 확인 오류: ${error.message}`;
+    logger.log("error", errorMessage, { userId: req.body.userId });
+    res.status(500).send(errorMessage);
   }
-}
-
-// 미들웨어 설정
-function setupMiddlewares(router) {
-  router.use(helmet());
-  router.use(sessionMiddleware());
-}
-
-// 세션 미들웨어
-function sessionMiddleware() {
-  return session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      secure: true,
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
-    },
-  });
 }
 
 // 아이디 중복 확인 라우트
 router.post(
   "/checkUserIdAvailability",
   validateFields(["userId"]),
-  checkUserIdAvailability
+  checkDuplicateUserId
 );
 
 // 회원 가입 라우트
@@ -91,16 +94,12 @@ router.post("/login", validateFields(["userId", "password"]), loginUser);
 router.get("/logout", logoutUser);
 
 // 사용자 정보 변경 라우트
-router.post(
-  "/changeUser",
-  validateFields(["userId", "newPassword", "email"]),
-  changeUser
-);
+router.post("/changeUser", changeUser);
 
 module.exports = router;
 
 // 아이디 중복 확인 로직
-async function checkUserIdAvailability(req, res) {
+async function checkDuplicateUserId(req, res) {
   try {
     const { userId } = req.body;
     const [user] = await db.query("SELECT * FROM users WHERE userId = ?", [
@@ -111,8 +110,9 @@ async function checkUserIdAvailability(req, res) {
     }
     res.status(200).send("사용 가능한 아이디입니다.");
   } catch (error) {
-    logger.log("error", `아이디 중복 확인 오류: ${error.message}`, { userId });
-    res.status(500).send(`아이디 중복 확인 오류: ${error.message}`);
+    const errorMessage = `아이디 중복 확인 오류: ${error.message}`;
+    logger.log("error", errorMessage, { userId: req.body.userId });
+    res.status(500).send(errorMessage);
   }
 }
 
@@ -128,12 +128,13 @@ async function registerUser(req, res) {
     logger.log("success", "회원가입 성공", { userId, email, phone });
     res.status(200).send("회원가입 성공");
   } catch (error) {
-    logger.log("error", `회원가입 오류: ${error.message}`, {
-      userId,
-      email,
-      phone,
+    const errorMessage = `회원가입 오류: ${error.message}`;
+    logger.log("error", errorMessage, {
+      userId: req.body.userId,
+      email: req.body.email,
+      phone: req.body.phone,
     });
-    res.status(500).send(`회원가입 오류: ${error.message}`);
+    res.status(500).send(errorMessage);
   }
 }
 
@@ -151,22 +152,24 @@ async function loginUser(req, res) {
     if (!isMatch) {
       return res.status(400).send("비밀번호가 일치하지 않습니다.");
     }
-
     res.status(200).send(removePassword(user));
   } catch (error) {
-    logger.log("error", `로그인 오류: ${error.message}`, { userId });
-    res.status(500).send(`로그인 오류: ${error.message}`);
+    const errorMessage = `로그인 오류: ${error.message}`;
+    logger.log("error", errorMessage, { userId: req.body.userId });
+    res.status(500).send(errorMessage);
   }
 }
 
+// 로그아웃 로직
 async function logoutUser(req, res) {
   try {
     req.session.destroy();
     res.status(200).redirect("/");
     logger.log("success", "로그아웃 성공");
   } catch (error) {
-    logger.log("error", `로그아웃 오류: ${error.message}`, { userId });
-    res.status(500).send(`로그아웃 오류: ${error.message}`);
+    const errorMessage = `로그아웃 오류: ${error.message}`;
+    logger.log("error", errorMessage, { userId: req.body.userId });
+    res.status(500).send(errorMessage);
   }
 }
 
@@ -174,57 +177,58 @@ async function logoutUser(req, res) {
 async function deleteUser(req, res) {
   try {
     const { userId, password } = req.body;
-
     const [user] = await db.query("SELECT * FROM users WHERE userId = ?", [
       userId,
     ]);
-
     if (!user) {
       return res.status(400).send("아이디가 존재하지 않습니다.");
     }
-
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).send("비밀번호가 일치하지 않습니다.");
     }
-
     await db.query("DELETE FROM users WHERE userId = ?", [userId]);
     logger.log("success", "계정 삭제 성공", { userId });
     res.status(200).send("계정 삭제 성공");
   } catch (error) {
-    logger.log("error", `계정 삭제 오류: ${error.message}`, { userId });
-    res.status(500).send(`계정 삭제 오류: ${error.message}`);
+    const errorMessage = `계정 삭제 오류: ${error.message}`;
+    logger.log("error", errorMessage, { userId: req.body.userId });
+    res.status(500).send(errorMessage);
   }
 }
 
 // 사용자 정보 변경 로직
 async function changeUser(req, res) {
   try {
-    const { userId, newPassword, email } = req.body;
-
+    const { userId, newPassword, email, phone } = req.body;
     const [user] = await db.query("SELECT * FROM users WHERE userId = ?", [
       userId,
     ]);
-
     if (!user) {
       return res.status(400).send("아이디가 존재하지 않습니다.");
     }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    await db.query(
-      "UPDATE users SET password = ?, email = ? WHERE userId = ?",
-      [hashedPassword, email, userId]
-    );
-
+    if (newPassword !== "") {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await db.query(
+        "UPDATE users SET password = ?, email = ?, phone = ? WHERE userId = ?",
+        [hashedPassword, email, phone, userId]
+      );
+    } else {
+      await db.query("UPDATE users SET email = ?, phone = ? WHERE userId = ?", [
+        email,
+        phone,
+        userId,
+      ]);
+    }
+    logger.log("success", "정보 변경 성공", { userId });
     const [updatedUser] = await db.query(
       "SELECT * FROM users WHERE userId = ?",
       [userId]
     );
-
     res.status(200).send(removePassword(updatedUser));
   } catch (error) {
-    logger.log("error", `정보 변경 오류: ${error.message}`, { userId });
-    res.status(500).send(`정보 변경 오류: ${error.message}`);
+    const errorMessage = `정보 변경 오류: ${error.message}`;
+    logger.log("error", errorMessage, { userId: req.body.userId });
+    res.status(500).send(errorMessage);
   }
 }
