@@ -130,13 +130,18 @@ export default {
 
   data() {
     return {
+      // user: {
+      //   email: "",
+      //   password: "",
+      //   subscriptions: [
+      //     { id: 1, name: "상품 A", expires: "2024-12-31" },
+      //     { id: 2, name: "상품 B", expires: "2025-06-30" },
+      //   ],
+      // },
       user: {
-        email: "user@example.com",
+        email: "",
         password: "",
-        subscriptions: [
-          { id: 1, name: "상품 A", expires: "2024-12-31" },
-          { id: 2, name: "상품 B", expires: "2025-06-30" },
-        ],
+        subscriptions: [],
       },
       newPassword: "",
       confirmNewPassword: "",
@@ -149,6 +154,14 @@ export default {
       showDeleteConfirmation: false,
       deletePassword: "",
       deleteError: "",
+    };
+  },
+
+  mounted() {
+    this.user = {
+      email: this.$store.getters.userEmail,
+      password: "",
+      subscriptions: this.$store.getters.userSubscriptions || [],
     };
   },
 
