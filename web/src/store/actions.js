@@ -73,4 +73,25 @@ export const actions = {
       console.error("Logout failed:", error);
     }
   },
+
+  async changeUser({ commit }, credentials) {
+    try {
+      const response = await axios.post("/api/changeUser", credentials);
+
+      console.log("response:", response);
+
+      if (response.status === 200) {
+        commit("setLoggedIn", true);
+        commit("setUser", response.data);
+
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error("Change user failed:", error);
+
+      return error.response.data;
+    }
+  },
 };

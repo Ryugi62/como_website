@@ -130,14 +130,6 @@ export default {
 
   data() {
     return {
-      // user: {
-      //   email: "",
-      //   password: "",
-      //   subscriptions: [
-      //     { id: 1, name: "상품 A", expires: "2024-12-31" },
-      //     { id: 2, name: "상품 B", expires: "2025-06-30" },
-      //   ],
-      // },
       user: {
         email: "",
         password: "",
@@ -166,10 +158,8 @@ export default {
   },
 
   methods: {
-    updateProfile() {
+    async updateProfile() {
       this.validateEmail();
-      this.validatePasswordStrength();
-      this.validateConfirmPassword();
       this.validateNewPasswordStrength();
       this.validateConfirmNewPassword();
 
@@ -182,8 +172,19 @@ export default {
       ) {
         // 비밀번호 변경 로직 추가
         if (this.newPassword === this.confirmNewPassword) {
-          this.user.password = this.newPassword;
-          alert("비밀번호가 변경되었습니다.");
+          const user = {
+            userId: this.$store.state.user.userId,
+            email: this.user.email,
+            newPassword: this.newPassword,
+          };
+
+          const result = this.$store.dispatch("changeUser", user);
+
+          if (result) {
+            alert("프로필이 업데이트되었습니다.");
+          } else {
+            alert("프로필 업데이트에 실패했습니다.");
+          }
         } else {
           alert("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
         }
@@ -204,13 +205,14 @@ export default {
     },
 
     validateNewPasswordStrength() {
-      const newPassword = this.newPassword;
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      // 비밀번호는 최소 8자 이상, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
       this.newPasswordError =
-        newPassword === ""
+        this.newPassword === ""
           ? ""
-          : !passwordRegex.test(newPassword)
-          ? "비밀번호는 8자 이상, 대/소문자 및 숫자를 포함해야 합니다."
+          : !passwordRegex.test(this.newPassword)
+          ? "비밀번호는 최소 8자 이상, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다."
           : "";
     },
 
@@ -457,22 +459,30 @@ button:hover {
   background-color: #e6a609;
 }
 
+.delete-account-button,
+.delete-account-button * {
+  /* border: 1px solid red; */
+}
+
 /* 계정 삭제 버튼 스타일 */
 .delete-account-button {
-  margin-left: auto;
-  background-color: #d9534f;
-  color: white;
-  padding: 12px 30px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s;
+  top: 15px;
+  right: 20px;
+  color: #ffc025;
+  padding: 0;
+  position: absolute;
+  background-color: transparent;
 }
 
 /* 계정 삭제 버튼 스타일 (호버) */
 .delete-account-button:hover {
-  background-color: #c9302c;
+  text-decoration: underline;
+  background-color: transparent;
+}
+/* if click */
+.delete-account-button:active {
+  color: #e6a609;
+  text-decoration: none;
 }
 
 /* 에러 메시지 스타일 */
