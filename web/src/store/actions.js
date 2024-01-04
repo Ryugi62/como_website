@@ -55,8 +55,6 @@ export const actions = {
       if (response.status === 200) {
         commit("setLoggedIn", true);
         commit("setUser", response.data);
-
-        return true;
       }
 
       return response;
