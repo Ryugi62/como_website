@@ -2,14 +2,14 @@
   <HeaderComponent />
   <div class="my-page">
     <div class="page-content">
-      <h1 class="page-title">My Page</h1>
+      <h1 class="page-title">내 페이지</h1>
       <p>사용자 정보를 수정하고, 결제 내역을 확인하세요.</p>
 
       <form @submit.prevent="updateProfile" class="profile-form">
         <section class="section">
           <h2 class="section-title">개인 정보 관리</h2>
           <div class="input-group">
-            <label for="email">Email:</label>
+            <label for="email">이메일:</label>
             <input
               type="email"
               id="email"
@@ -20,29 +20,30 @@
             <p class="error-message" v-if="emailError">{{ emailError }}</p>
           </div>
           <div class="input-group">
-            <label for="password">Password:</label>
+            <label for="newPassword">새 비밀번호:</label>
             <input
               type="password"
-              id="password"
-              v-model="user.password"
-              @blur="validatePasswordStrength"
+              id="newPassword"
+              v-model="newPassword"
+              @blur="validateNewPasswordStrength"
               @keydown.enter.prevent
             />
-            <p class="error-message" v-if="passwordError">
-              {{ passwordError }}
+            <p class="error-message" v-if="newPasswordError">
+              {{ newPasswordError }}
             </p>
           </div>
+
           <div class="input-group">
-            <label for="confirmPassword">Confirm Password:</label>
+            <label for="confirmNewPassword">새 비밀번호 확인:</label>
             <input
               type="password"
-              id="confirmPassword"
-              v-model="confirmPassword"
-              @blur="validateConfirmPassword"
+              id="confirmNewPassword"
+              v-model="confirmNewPassword"
+              @blur="validateConfirmNewPassword"
               @keydown.enter.prevent
             />
-            <p class="error-message" v-if="confirmPasswordError">
-              {{ confirmPasswordError }}
+            <p class="error-message" v-if="confirmNewPasswordError">
+              {{ confirmNewPasswordError }}
             </p>
           </div>
         </section>
@@ -104,10 +105,10 @@
         </div>
 
         <div class="button-container">
-          <button type="submit">Update Profile</button>
+          <button type="submit">프로필 업데이트</button>
           <button
             @click.prevent="promptDeleteAccount"
-            class="delete-account-link"
+            class="delete-account-button"
           >
             계정 삭제
           </button>
@@ -131,16 +132,20 @@ export default {
     return {
       user: {
         email: "user@example.com",
-        password: "password123",
+        password: "",
         subscriptions: [
           { id: 1, name: "상품 A", expires: "2024-12-31" },
           { id: 2, name: "상품 B", expires: "2025-06-30" },
         ],
       },
+      newPassword: "",
+      confirmNewPassword: "",
       confirmPassword: "",
       emailError: "",
       passwordError: "",
       confirmPasswordError: false,
+      newPasswordError: "",
+      confirmNewPasswordError: "",
       showDeleteConfirmation: false,
       deletePassword: "",
       deleteError: "",
@@ -152,13 +157,23 @@ export default {
       this.validateEmail();
       this.validatePasswordStrength();
       this.validateConfirmPassword();
+      this.validateNewPasswordStrength();
+      this.validateConfirmNewPassword();
 
       if (
         !this.emailError &&
         !this.passwordError &&
-        !this.confirmPasswordError
+        !this.confirmPasswordError &&
+        !this.newPasswordError &&
+        !this.confirmNewPasswordError
       ) {
-        alert("프로필이 업데이트되었습니다.");
+        // 비밀번호 변경 로직 추가
+        if (this.newPassword === this.confirmNewPassword) {
+          this.user.password = this.newPassword;
+          alert("비밀번호가 변경되었습니다.");
+        } else {
+          alert("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+        }
         this.$router.push("/");
       } else {
         alert("프로필 업데이트에 실패했습니다.");
@@ -175,21 +190,21 @@ export default {
           : "";
     },
 
-    validateConfirmPassword() {
-      this.confirmPasswordError =
-        this.confirmPassword !== this.user.password
-          ? "비밀번호가 일치하지 않습니다."
+    validateNewPasswordStrength() {
+      const newPassword = this.newPassword;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      this.newPasswordError =
+        newPassword === ""
+          ? ""
+          : !passwordRegex.test(newPassword)
+          ? "비밀번호는 8자 이상, 대/소문자 및 숫자를 포함해야 합니다."
           : "";
     },
 
-    validatePasswordStrength() {
-      const password = this.user.password;
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-      this.passwordError =
-        password === ""
-          ? ""
-          : !passwordRegex.test(password)
-          ? "비밀번호는 8자 이상, 대/소문자 및 숫자를 포함해야 합니다."
+    validateConfirmNewPassword() {
+      this.confirmNewPasswordError =
+        this.confirmNewPassword !== this.newPassword
+          ? "비밀번호가 일치하지 않습니다."
           : "";
     },
 
@@ -423,22 +438,22 @@ button:hover {
   background-color: #e6a609;
 }
 
-/* 계정 삭제 링크 스타일 */
-.delete-account-link {
-  position: absolute;
-  bottom: 10px;
-  right: 20px;
-  color: #a5a5a5;
+/* 계정 삭제 버튼 스타일 */
+.delete-account-button {
+  margin-left: auto;
+  background-color: #d9534f;
+  color: white;
+  padding: 12px 30px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.2s;
 }
 
-/* 계정 삭제 링크 스타일 (호버) */
-.delete-account-link:hover {
-  text-decoration: underline;
-  color: #ffffff;
+/* 계정 삭제 버튼 스타일 (호버) */
+.delete-account-button:hover {
+  background-color: #c9302c;
 }
 
 /* 에러 메시지 스타일 */
