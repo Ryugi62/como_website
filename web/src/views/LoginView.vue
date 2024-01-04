@@ -69,6 +69,8 @@ export default {
         this.$router.push("/");
       } else {
         alert("로그인에 실패하였습니다.");
+
+        this.password = "";
       }
     },
   },
