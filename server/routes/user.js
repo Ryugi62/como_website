@@ -54,13 +54,21 @@ function removePassword(user) {
 // 아이디 중복 확인 함수
 async function checkDuplicateUserId(req, res, next) {
   try {
+    // 요청이 들어왔는지 확인
+    console.log(req.body);
+
+    // 요청 바디에서 아이디 추출
+    console.log(req.body.userId);
+
     const { userId } = req.body;
     const [user] = await db.query("SELECT * FROM users WHERE userId = ?", [
       userId,
     ]);
     if (user) {
+      console.log("중복된 아이디가 존재합니다.");
       return res.status(400).send("중복된 아이디가 존재합니다.");
     }
+    console.log("사용 가능한 아이디입니다.");
     next();
   } catch (error) {
     const errorMessage = `아이디 중복 확인 오류: ${error.message}`;
