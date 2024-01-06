@@ -184,7 +184,8 @@ function handleServerError(res, message, error) {
 router.post(
   "/checkUserIdAvailability",
   validateFields(["userId"]),
-  checkDuplicateUserIdMiddleware
+  checkDuplicateUserIdMiddleware,
+  (req, res) => res.status(200).send("사용 가능한 아이디입니다.")
 );
 
 // 회원 가입 라우트
