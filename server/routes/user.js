@@ -9,6 +9,8 @@ require("dotenv").config();
 
 const router = express.Router();
 
+setupMiddlewares(router);
+
 // 미들웨어 설정
 function setupMiddlewares(router) {
   // 보안 헤더 추가
@@ -75,10 +77,12 @@ async function registerUserMiddleware(req, res) {
   try {
     const { userId, email, password, phone } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
+
     await db.query(
       "INSERT INTO users (userId, email, password, phone) VALUES (?, ?, ?, ?)",
       [userId, email, hashedPassword, phone]
     );
+
     logger.log("success", "회원가입 성공", { userId, email, phone });
     res.status(200).send("회원가입 성공");
   } catch (error) {
@@ -100,6 +104,10 @@ async function loginUserMiddleware(req, res) {
     if (!isMatch) {
       return res.status(400).send("비밀번호가 일치하지 않습니다.");
     }
+
+    // 세션에 저장
+    req.session.isLoggedIn = true;
+
     res.status(200).send(removePassword(user));
   } catch (error) {
     handleServerError(res, "로그인 오류", error);
