@@ -2,6 +2,7 @@
   <div class="product-management">
     <h2>상품 관리</h2>
     <div class="product-management__categories">
+      <!-- 카테고리 목록 -->
       <div
         class="product-management__category"
         v-for="(category, key) in categories"
@@ -16,6 +17,7 @@
         </select>
         <button @click="addCategory(category)">추가</button>
       </div>
+      <!-- 상품 추가 버튼 -->
       <button class="add-plan-button" @click="addPlan">상품 추가</button>
     </div>
 
@@ -91,9 +93,22 @@
             </template>
           </td>
           <td>
-            <template v-if="!plan.edit">{{ plan.price }}</template>
+            <template v-if="!plan.edit">
+              {{
+                plan.price
+                  .toLocaleString()
+                  .split("")
+                  .reverse()
+                  .join("")
+                  .match(/[0-9]{1,3}/g)
+                  .join(",")
+                  .split("")
+                  .reverse()
+                  .join("") + " 원"
+              }}
+            </template>
             <template v-else>
-              <input type="number" v-model="plan.price" />
+              <input type="number" v-model.number="plan.price" />
             </template>
           </td>
           <td class="product-management__features">
@@ -170,162 +185,46 @@ export default {
           selected: "",
         },
       },
-
-      planDetails: [
-        {
-          id: 1,
-          title: "바이낸스 봇",
-          method: "현물",
-          duration: "1개월",
-          grade: "FREE",
-          price: 0,
-          edit: false,
-          features: [
-            "거래소 연동",
-            "자동 매매",
-            "자동 매수",
-            "자동 매도",
-            "엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음",
-          ],
-        },
-        {
-          id: 2,
-          title: "바이낸스 봇",
-          method: "현물",
-          duration: "6개월",
-          grade: "BASIC",
-          price: 100000,
-          edit: false,
-          features: [
-            "거래소 연동",
-            "자동 매매",
-            "자동 매수",
-            "자동 매도",
-            "엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음",
-          ],
-        },
-        {
-          id: 3,
-          title: "바이낸스 봇",
-          method: "현물",
-          duration: "12개월",
-          grade: "EXPERT",
-          price: 200000,
-          edit: false,
-          features: [
-            "거래소 연동",
-            "자동 매매",
-            "자동 매수",
-            "자동 매도",
-            "엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음",
-          ],
-        },
-        {
-          id: 4,
-          title: "바이낸스 봇",
-          method: "선물",
-          duration: "1개월",
-          grade: "FREE",
-          price: 0,
-          edit: false,
-          features: [
-            "거래소 연동",
-            "자동 매매",
-            "자동 매수",
-            "자동 매도",
-            "엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음",
-          ],
-        },
-        {
-          id: 5,
-          title: "바이낸스 봇",
-          method: "선물",
-          duration: "6개월",
-          grade: "BASIC",
-          price: 100000,
-          edit: false,
-          features: [
-            "거래소 연동",
-            "자동 매매",
-            "자동 매수",
-            "자동 매도",
-            "엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음",
-          ],
-        },
-        {
-          id: 6,
-          title: "바이낸스 봇",
-          method: "선물",
-          duration: "12개월",
-          grade: "EXPERT",
-          price: 200000,
-          edit: false,
-          features: [
-            "거래소 연동",
-            "자동 매매",
-            "자동 매수",
-            "자동 매도",
-            "엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음",
-          ],
-        },
-        {
-          id: 7,
-          title: "바이낸스 봇",
-          method: "현물 + 선물",
-          duration: "1개월",
-          grade: "FREE",
-          price: 0,
-          edit: false,
-          features: [
-            "거래소 연동",
-            "자동 매매",
-            "자동 매수",
-            "자동 매도",
-            "엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음",
-          ],
-        },
-        {
-          id: 8,
-          title: "바이낸스 봇",
-          method: "현물 + 선물",
-          duration: "6개월",
-          grade: "BASIC",
-          price: 100000,
-          edit: false,
-          features: [
-            "거래소 연동",
-            "자동 매매",
-            "자동 매수",
-            "자동 매도",
-            "엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음엄청 긴 설명 대충 엄청 긴 설명이 있을 수 있음",
-          ],
-        },
-      ],
+      planDetails: [],
     };
   },
 
+  mounted() {
+    this.getPlanDetails();
+  },
+
   methods: {
-    // 카테고리 추가 버튼을 눌렀을 때 실행되는 메서드
+    async getPlanDetails() {
+      const tempDetail = await this.$store.dispatch("getAllPlanDetails");
+
+      tempDetail.forEach((plan, index) => {
+        plan.id = index + 1;
+        plan.title = plan.BotName;
+        plan.method = plan.TradeType;
+        plan.duration = plan.Duration;
+        plan.price = plan.Prices;
+        plan.grade = plan.Grade;
+        plan.edit = false;
+        plan.features = plan.Features;
+      });
+
+      this.planDetails = tempDetail;
+    },
+
     addCategory(category) {
-      // 추가할 카테고리의 이름 입력받기
       const categoryName = prompt(`${category.title} 이름을 입력하세요.`);
       if (!categoryName) return;
 
-      // 중복 여부 확인
       const isDuplicate = category.options.some((option) => {
         return option === categoryName;
       });
 
-      // 중복된 카테고리가 없을 경우에만 추가
       if (isDuplicate) {
         alert("이미 추가된 카테고리입니다.");
         return;
       }
 
-      // 카테고리 목록에 추가
       category.options.push(categoryName);
-
-      // 카테고리 선택 초기화
       category.selected = "";
     },
 
@@ -338,9 +237,7 @@ export default {
       if (index !== -1) this.planDetails.splice(index, 1);
     },
 
-    // 상품 추가 버튼을 눌렀을 때 실행되는 메서드
     addPlan() {
-      // 모든 카테고리가 선택되었는지 확인
       if (
         !this.categories.bot.selected ||
         !this.categories.method.selected ||
@@ -348,19 +245,15 @@ export default {
         !this.categories.grade.selected
       ) {
         alert("카테고리를 모두 선택해주세요.");
-
-        // 비어있는 카테고리에 포커스를 맞춤
         for (const category in this.categories) {
           if (!this.categories[category].selected) {
             this.$refs[category][0].focus();
             break;
           }
         }
-
         return;
       }
 
-      // 새로운 상품 정보 생성
       const newPlan = {
         title: this.categories.bot.selected,
         method: this.categories.method.selected,
@@ -372,7 +265,6 @@ export default {
         features: [],
       };
 
-      // 중복 상품 확인
       const isDuplicate = this.planDetails.some((plan) => {
         return (
           plan.title === newPlan.title &&
@@ -384,14 +276,11 @@ export default {
 
       let scrollId = 0;
 
-      // 중복된 상품이 없을 경우에만 추가
       if (!isDuplicate) {
-        // 상품 목록에 새로운 상품 객체 추가
         this.planDetails.push(newPlan);
         scrollId = newPlan.id - 1;
       } else {
         alert("이미 추가된 상품입니다.");
-        // 중복된 상품을 찾아 해당 상품의 ID를 얻음
         scrollId = this.planDetails.find((plan) => {
           return (
             plan.title === newPlan.title &&
@@ -402,17 +291,14 @@ export default {
         }).id;
       }
 
-      // 카테고리 선택 초기화
       for (const category in this.categories) {
         this.categories[category].selected = "";
       }
 
-      // 해당 상품으로 스크롤
       this.scrollToPlan(scrollId);
       this.flashPlan(scrollId);
     },
 
-    // 스크롤 함수 추가
     scrollToPlan(planId) {
       const element = document.getElementById(`plan-${planId}`);
 
@@ -426,12 +312,10 @@ export default {
     flashPlan(planId) {
       const element = document.getElementById(`plan-${planId}`);
       if (element) {
-        // 애니메이션이 끝나면 다시 시작하도록 설정
         element.addEventListener("animationend", () => {
           element.classList.remove("flash");
         });
 
-        // 애니메이션을 시작하고 속성을 초기화
         element.classList.add("flash");
       }
     },

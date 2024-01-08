@@ -10,4 +10,9 @@ export const mutations = {
     state.user = value;
     localStorage.setItem("user", JSON.stringify(value));
   },
+
+  setPlanDetails(state, value) {
+    state.planDetail = value;
+    localStorage.setItem("planDetail", JSON.stringify(value));
+  },
 };

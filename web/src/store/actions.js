@@ -94,4 +94,60 @@ export const actions = {
       return error.response.data;
     }
   },
+
+  // planDetail 관련
+  async getAllPlanDetails({ commit }) {
+    console.log("getAllPlanDetails");
+
+    try {
+      const response = await axios.get("/api/plan-details");
+
+      if (response.status === 200) {
+        commit("setPlanDetails", response.data);
+
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Get all plan details failed:", error);
+    }
+  },
+
+  async addPlanDetail({ commit }, planDetail) {
+    try {
+      const response = await axios.post("/api/plan-details", planDetail);
+
+      if (response.status === 200) {
+        commit("addPlanDetail", response.data);
+      }
+    } catch (error) {
+      console.error("Add plan detail failed:", error);
+    }
+  },
+
+  async deletePlanDetail({ commit }, planDetailId) {
+    try {
+      const response = await axios.delete(`/api/plan-details/${planDetailId}`);
+
+      if (response.status === 200) {
+        commit("deletePlanDetail", planDetailId);
+      }
+    } catch (error) {
+      console.error("Delete plan detail failed:", error);
+    }
+  },
+
+  async updatePlanDetail({ commit }, planDetail) {
+    try {
+      const response = await axios.put(
+        `/api/plan-details/${planDetail._id}`,
+        planDetail
+      );
+
+      if (response.status === 200) {
+        commit("updatePlanDetail", planDetail);
+      }
+    } catch (error) {
+      console.error("Update plan detail failed:", error);
+    }
+  },
 };

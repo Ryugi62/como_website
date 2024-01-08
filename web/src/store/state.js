@@ -5,4 +5,7 @@ export const state = {
   user: localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null,
+  planDetail: localStorage.getItem("planDetail")
+    ? JSON.parse(localStorage.getItem("planDetail"))
+    : null,
 };
