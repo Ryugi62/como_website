@@ -307,8 +307,6 @@ export default {
   methods: {
     // 카테고리 추가 버튼을 눌렀을 때 실행되는 메서드
     addCategory(category) {
-      if (!category.selected) return;
-
       // 추가할 카테고리의 이름 입력받기
       const categoryName = prompt(`${category.title} 이름을 입력하세요.`);
       if (!categoryName) return;
@@ -653,19 +651,10 @@ export default {
   padding: 0 10px;
 }
 .product-management table td .delete-button:hover {
-  background-color: #cc0000;
-}
-
-.product-management table td .delete-button {
-  background-color: #ff0000;
-}
-.product-management table td .delete-button:hover {
-  background-color: #cc0000;
+  background-color: #d72323;
 }
 
 .flash {
-  /* not infinity animation */
-  /* smooth */
   animation: flash 2s ease-in-out;
 }
 
