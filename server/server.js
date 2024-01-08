@@ -25,6 +25,7 @@ app.use("/api/bots", require("./routes/bots"));
 app.use("/api/plan-details", require("./routes/planDetails"));
 app.use("/api/prices", require("./routes/prices"));
 app.use("/api/features", require("./routes/features"));
+app.use("/api/trade-types", require("./routes/tradeTypes"));
 
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/dist/index.html");

@@ -164,4 +164,18 @@ export const actions = {
       console.error("Get all bots failed:", error);
     }
   },
+
+  async getAllTradeTypes({ commit }) {
+    try {
+      const response = await axios.get("/api/trade-types");
+
+      if (response.status === 200) {
+        commit("setTradeTypes", response.data);
+
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Get all trade types failed:", error);
+    }
+  },
 };

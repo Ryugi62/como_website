@@ -163,22 +163,26 @@ export default {
           options: [],
           selected: "",
         },
+
         method: {
           title: "거래 방식",
-          options: ["현물", "선물", "현물 + 선물"],
+          options: [],
           selected: "",
         },
+
         duration: {
           title: "기간",
           options: ["1개월", "6개월", "12개월"],
           selected: "",
         },
+
         grade: {
           title: "등급",
           options: ["FREE", "BASIC", "EXPERT"],
           selected: "",
         },
       },
+
       planDetails: [],
     };
   },
@@ -186,6 +190,7 @@ export default {
   mounted() {
     this.getPlanDetails();
     this.getBots();
+    this.getMethods();
   },
 
   methods: {
@@ -209,10 +214,18 @@ export default {
     async getBots() {
       const tempBots = await this.$store.dispatch("getAllBots");
 
-      console.log(tempBots);
-
       tempBots.forEach((bot) => {
         this.categories.bot.options.push(bot.BotName);
+      });
+    },
+
+    async getMethods() {
+      const tempMethods = await this.$store.dispatch("getAllTradeTypes");
+
+      console.log(tempMethods);
+
+      tempMethods.forEach((method) => {
+        this.categories.method.options.push(method.TypeName);
       });
     },
 
