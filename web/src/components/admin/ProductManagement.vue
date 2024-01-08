@@ -1,197 +1,113 @@
 <template>
   <div class="product-management">
     <h2>상품 관리</h2>
-    <button @click="toggleProductForm" class="add-product-button">
-      {{ showProductForm ? "폼 숨기기" : "상품 추가" }}
-    </button>
+    <div class="product-management__categories">
+      <!-- 각 카테고리에 대한 루프 -->
+      <div
+        class="product-management__category"
+        v-for="(category, key) in categories"
+        :key="key"
+      >
+        <h3>{{ category.title }}</h3>
 
-    <div v-if="showProductForm" class="product-form">
-      <h3>{{ editableProduct ? "상품 수정" : "새 상품 추가" }}</h3>
-      <form @submit.prevent="handleFormSubmit">
-        <input
-          v-model="editableProduct.name"
-          type="text"
-          placeholder="상품명"
-          required
-        />
-        <input
-          v-model.number="editableProduct.price"
-          type="number"
-          placeholder="가격"
-          required
-        />
-        <input
-          v-model.number="editableProduct.stock"
-          type="number"
-          placeholder="재고"
-          required
-        />
-        <textarea
-          v-model="editableProduct.description"
-          placeholder="설명"
-        ></textarea>
-        <button type="submit" class="submit-button">저장</button>
-      </form>
+        <!-- 카테고리의 선택 옵션을 표시하는 드롭다운 -->
+        <select v-model="category.selected">
+          <option value="">{{ category.title }} 선택</option>
+          <option v-for="option in category.options" :key="option">
+            {{ option }}
+          </option>
+        </select>
+        <button>추가</button>
+      </div>
     </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>상품명</th>
-          <th>가격</th>
-          <th>재고</th>
-          <th>설명</th>
-          <th>작업</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="product in products" :key="product.id">
-          <td>{{ product.id }}</td>
-          <td>{{ product.name }}</td>
-          <td>{{ product.price }}</td>
-          <td>{{ product.stock }}</td>
-          <td>{{ product.description }}</td>
-          <td class="actions">
-            <button @click="setEditableProduct(product)" class="edit-button">
-              수정
-            </button>
-            <button @click="deleteProduct(product.id)" class="delete-button">
-              삭제
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
 <script>
 export default {
   name: "ProductManagement",
+
   data() {
     return {
-      products: [
-        {
-          id: 1,
-          name: "Sample Product 1",
-          price: 1000,
-          stock: 50,
-          description: "Description for product 1",
+      categories: {
+        bot: {
+          title: "봇",
+          options: [
+            "바이낸스 봇",
+            "업비트 봇",
+            "빗썸 봇",
+            "김프,아비트라지 봇",
+            "공지 봇",
+          ],
+          selected: "",
         },
-        // Additional product data...
-      ],
-      showProductForm: false,
-      editableProduct: { name: "", price: 0, stock: 0, description: "" },
+        method: {
+          title: "거래 방식",
+          options: ["현물", "선물", "현물 + 선물"],
+          selected: "",
+        },
+        duration: {
+          title: "기간",
+          options: ["1개월", "6개월", "12개월"],
+          selected: "",
+        },
+        grade: {
+          title: "등급",
+          options: ["FREE", "BASIC", "EXPERT"],
+          selected: "",
+        },
+      },
     };
-  },
-  methods: {
-    toggleProductForm() {
-      this.showProductForm = !this.showProductForm;
-      if (!this.showProductForm) {
-        this.resetEditableProduct();
-      }
-    },
-    setEditableProduct(product) {
-      this.editableProduct = { ...product };
-      this.showProductForm = true;
-    },
-    handleFormSubmit() {
-      if (this.editableProduct.id) {
-        const index = this.products.findIndex(
-          (p) => p.id === this.editableProduct.id
-        );
-        this.products.splice(index, 1, this.editableProduct);
-      } else {
-        const newProduct = { ...this.editableProduct, id: Date.now() };
-        this.products.push(newProduct);
-      }
-      this.toggleProductForm();
-    },
-    deleteProduct(productId) {
-      this.products = this.products.filter(
-        (product) => product.id !== productId
-      );
-    },
-    resetEditableProduct() {
-      this.editableProduct = { name: "", price: 0, stock: 0, description: "" };
-    },
   },
 };
 </script>
 
 <style scoped>
+/* 스타일 코드는 그대로 유지 */
 .product-management {
   color: #333;
-  margin: 0 auto;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.product-management h3 {
-  text-align: center;
+.product-management__categories {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px;
 }
 
-.add-product-button,
-.submit-button {
-  background-color: #005f73;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  cursor: pointer;
+.product-management__category {
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
 }
 
-.edit-button {
-  background-color: #f9a825;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
+.product-management__category h3 {
+  margin-right: 10px;
 }
 
-.delete-button {
-  background-color: #d32f2f;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
-}
-
-.product-management table {
-  width: 100%;
-  margin-top: 20px;
-  border-collapse: collapse;
-}
-
-.product-management th,
-.product-management td {
-  border: 1px solid #ddd;
-  text-align: left;
-  padding: 8px;
-}
-
-.product-management th {
-  background-color: #f4f4f4;
-}
-
-form input[type="text"],
-form input[type="number"],
-form textarea {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
+.product-management__category select {
+  flex: 1;
+  height: 30px;
+  border: 1px solid #ccc;
+  padding: 0 10px;
+  border-radius: 5px;
   box-sizing: border-box;
 }
 
-.actions {
-  gap: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-.actions button {
-  flex-grow: 1;
+.product-management__category button {
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #005f73;
+  color: #fff;
+  cursor: pointer;
+  padding: 0 10px;
 }
 </style>
