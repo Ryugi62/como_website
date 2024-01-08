@@ -160,13 +160,7 @@ export default {
       categories: {
         bot: {
           title: "봇",
-          options: [
-            "바이낸스 봇",
-            "업비트 봇",
-            "빗썸 봇",
-            "김프,아비트라지 봇",
-            "공지 봇",
-          ],
+          options: [],
           selected: "",
         },
         method: {
@@ -191,6 +185,7 @@ export default {
 
   mounted() {
     this.getPlanDetails();
+    this.getBots();
   },
 
   methods: {
@@ -209,6 +204,16 @@ export default {
       });
 
       this.planDetails = tempDetail;
+    },
+
+    async getBots() {
+      const tempBots = await this.$store.dispatch("getAllBots");
+
+      console.log(tempBots);
+
+      tempBots.forEach((bot) => {
+        this.categories.bot.options.push(bot.BotName);
+      });
     },
 
     addCategory(category) {

@@ -150,4 +150,18 @@ export const actions = {
       console.error("Update plan detail failed:", error);
     }
   },
+
+  async getAllBots({ commit }) {
+    try {
+      const response = await axios.get("/api/bots");
+
+      if (response.status === 200) {
+        commit("setBots", response.data);
+
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Get all bots failed:", error);
+    }
+  },
 };

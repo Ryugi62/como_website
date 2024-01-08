@@ -39,8 +39,6 @@ router.get("/", async (req, res) => {
       };
     });
 
-    console.log("Get all plan details:", planDetailsWithPricesAndFeatures);
-
     res.status(200).json(planDetailsWithPricesAndFeatures);
   } catch (error) {
     console.error("Get all plan details failed:", error);
@@ -86,12 +84,10 @@ router.post("/", async (req, res) => {
       await db.query(featuresQuery, [featuresValues]);
     }
 
-    res
-      .status(201)
-      .json({
-        message: "New PlanDetail added successfully",
-        PlanDetailID: newPlanDetailId,
-      });
+    res.status(201).json({
+      message: "New PlanDetail added successfully",
+      PlanDetailID: newPlanDetailId,
+    });
   } catch (error) {
     console.error("Add new plan detail failed:", error);
     res.status(500).json({ error: "Internal Server Error" });
