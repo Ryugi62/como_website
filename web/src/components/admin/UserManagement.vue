@@ -9,55 +9,101 @@
       <h3>새 사용자 추가</h3>
       <form @submit.prevent="addUser">
         <!-- 기존 입력 필드 (이름, 이메일) -->
-        <input v-model="newUser.name" type="text" placeholder="이름" required />
-        <input
-          v-model="newUser.email"
-          type="email"
-          placeholder="이메일"
-          required
-        />
+        <div class="form-group">
+          <label for="name">이름</label>
+          <input
+            v-model="newUser.name"
+            type="text"
+            id="name"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">이메일</label>
+          <input
+            v-model="newUser.email"
+            type="email"
+            id="email"
+            required
+            class="form-control"
+          />
+        </div>
         <!-- 추가 입력 필드 -->
-        <input
-          v-model="newUser.contact"
-          type="text"
-          placeholder="연락처"
-          required
-        />
-        <select v-model="newUser.subscriptionStatus">
-          <option disabled value="">구독 여부 선택</option>
-          <option>구독 중</option>
-          <option>구독 안함</option>
-        </select>
-        <input
-          v-model="newUser.subscribedProduct"
-          type="text"
-          placeholder="결제상품"
-          required
-        />
-        <input
-          v-model="newUser.subscriptionStartDate"
-          type="date"
-          placeholder="구독시작일"
-          required
-        />
-        <input
-          v-model="newUser.subscriptionEndDate"
-          type="date"
-          placeholder="구독종료일"
-          required
-        />
-        <input
-          v-model="newUser.subscriptionAmount"
-          type="number"
-          placeholder="구독결제금액"
-          required
-        />
-        <input
-          v-model="newUser.referralLink"
-          type="text"
-          placeholder="레퍼럴링크"
-          required
-        />
+        <div class="form-group">
+          <label for="contact">연락처</label>
+          <input
+            v-model="newUser.contact"
+            type="text"
+            id="contact"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="subscriptionStatus">구독 여부</label>
+          <select
+            v-model="newUser.subscriptionStatus"
+            id="subscriptionStatus"
+            required
+            class="form-control"
+          >
+            <option disabled value="">구독 여부 선택</option>
+            <option>구독 중</option>
+            <option>구독 안함</option>
+          </select>
+        </div>
+        <!-- 나머지 입력 필드 추가 -->
+        <div class="form-group">
+          <label for="subscribedProduct">결제상품</label>
+          <input
+            v-model="newUser.subscribedProduct"
+            type="text"
+            id="subscribedProduct"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="subscriptionStartDate">구독시작일</label>
+          <input
+            v-model="newUser.subscriptionStartDate"
+            type="date"
+            id="subscriptionStartDate"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="subscriptionEndDate">구독종료일</label>
+          <input
+            v-model="newUser.subscriptionEndDate"
+            type="date"
+            id="subscriptionEndDate"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="subscriptionAmount">구독결제금액</label>
+          <input
+            v-model="newUser.subscriptionAmount"
+            type="number"
+            id="subscriptionAmount"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="referralLink">레퍼럴링크</label>
+          <input
+            v-model="newUser.referralLink"
+            type="text"
+            id="referralLink"
+            required
+            class="form-control"
+          />
+        </div>
         <button type="submit" class="submit-button">추가</button>
       </form>
     </div>
@@ -105,6 +151,7 @@
 <script>
 export default {
   name: "UserManagement",
+
   data() {
     return {
       users: [
@@ -120,7 +167,18 @@ export default {
           subscriptionAmount: 50000,
           referralLink: "https://example.com/ref=hong",
         },
-        // 추가 사용자 데이터
+        {
+          id: 2,
+          name: "김철수",
+          email: "dflk@gmail.com",
+          contact: "010-1234-5678",
+          subscriptionStatus: "구독 중",
+          subscribedProduct: "프리미엄 패키지",
+          subscriptionStartDate: "2021-01-01",
+          subscriptionEndDate: "2022-01-01",
+          subscriptionAmount: 50000,
+          referralLink: "https://example.com/ref=hong",
+        },
       ],
       newUser: {
         name: "",
@@ -133,24 +191,30 @@ export default {
         subscriptionAmount: 0,
         referralLink: "",
       },
+
       showAddUserForm: false,
     };
   },
+
   methods: {
     toggleAddUserForm() {
       this.showAddUserForm = !this.showAddUserForm;
     },
+
     addUser() {
       const newId = this.users.length + 1;
       this.users.push({ ...this.newUser, id: newId });
       this.resetNewUserForm();
     },
+
     editUser(user) {
       console.log("Edit feature implementation required:", user);
     },
+
     deleteUser(userId) {
       this.users = this.users.filter((user) => user.id !== userId);
     },
+
     resetNewUserForm() {
       // 모든 필드를 초기화
       Object.keys(this.newUser).forEach((key) => {
@@ -163,6 +227,22 @@ export default {
 </script>
 
 <style scoped>
+/* 추가한 스타일 */
+.form-group {
+  gap: 10px;
+  display: flex;
+  margin-bottom: 10px;
+  flex-direction: column;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+/* 기존 스타일 유지 */
 .user-management {
   color: #333;
   margin: 0 auto;
@@ -187,7 +267,7 @@ h3 {
 }
 
 .edit-button {
-  background-color: #f9a825;
+  background-color: #005f73;
   color: white;
   padding: 5px 10px;
   border: none;
@@ -195,11 +275,17 @@ h3 {
 }
 
 .delete-button {
-  background-color: #d32f2f;
+  background-color: #d72323;
   color: white;
   padding: 5px 10px;
   border: none;
   cursor: pointer;
+}
+
+.add-user-form {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
 }
 
 .user-management table {
@@ -216,16 +302,9 @@ td {
 }
 
 .user-management th {
-  background-color: #f4f4f4;
-}
-
-form input[type="text"],
-form input[type="email"] {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  box-sizing: border-box;
+  color: white;
+  text-align: center;
+  background-color: #005f73;
 }
 
 .actions {
