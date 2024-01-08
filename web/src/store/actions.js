@@ -3,7 +3,7 @@ import axios from "axios";
 export const actions = {
   async checkUserIdAvailability(context, userId) {
     try {
-      const response = await axios.post("/api/checkUserIdAvailability", {
+      const response = await axios.post("/api/users/checkUserIdAvailability", {
         userId,
       });
 
@@ -15,7 +15,7 @@ export const actions = {
 
   async register({ commit }, credentials) {
     try {
-      const response = await axios.post("/api/register", credentials);
+      const response = await axios.post("/api/users/register", credentials);
 
       // if status code is 200, then commit
       if (response.status === 200) {
@@ -33,7 +33,7 @@ export const actions = {
     try {
       console.log("credentials:", credentials);
 
-      const response = await axios.post("/api/deleteUser", credentials);
+      const response = await axios.post("/api/users/deleteUser", credentials);
 
       if (response.status === 200) {
         commit("setLoggedIn", false);
@@ -50,7 +50,7 @@ export const actions = {
 
   async login({ commit }, credentials) {
     try {
-      const response = await axios.post("/api/login", credentials);
+      const response = await axios.post("/api/users/login", credentials);
 
       if (response.status === 200) {
         commit("setLoggedIn", true);
@@ -67,7 +67,7 @@ export const actions = {
 
   async logout({ commit }) {
     try {
-      await axios.get("/api/logout");
+      await axios.get("/api/users/logout");
       commit("setLoggedIn", false);
     } catch (error) {
       console.error("Logout failed:", error);
@@ -76,7 +76,7 @@ export const actions = {
 
   async changeUser({ commit }, credentials) {
     try {
-      const response = await axios.post("/api/changeUser", credentials);
+      const response = await axios.post("/api/users/changeUser", credentials);
 
       console.log("response:", response);
 

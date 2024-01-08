@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const userRoutes = require("./routes/user");
 
 const app = express();
 
@@ -13,14 +12,19 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something broke!");
 });
 
-app.use(
-  "/api",
-  (req, res, next) => {
-    console.log("API request received");
-    next();
-  },
-  userRoutes
-);
+// log 출력
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url} ${req.path} ${req.ip}`);
+  next();
+});
+
+// API 미들웨어 설정
+app.use("/api/users", require("./routes/users"));
+app.use("/api/admins", require("./routes/admins"));
+app.use("/api/bots", require("./routes/bots"));
+app.use("/api/plan-details", require("./routes/planDetails"));
+app.use("/api/prices", require("./routes/prices"));
+app.use("/api/features", require("./routes/features"));
 
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/dist/index.html");
