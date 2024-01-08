@@ -172,7 +172,7 @@ export default {
 
         duration: {
           title: "기간",
-          options: ["1개월", "6개월", "12개월"],
+          options: [],
           selected: "",
         },
 
@@ -191,6 +191,7 @@ export default {
     this.getPlanDetails();
     this.getBots();
     this.getMethods();
+    this.getDuration();
   },
 
   methods: {
@@ -222,10 +223,16 @@ export default {
     async getMethods() {
       const tempMethods = await this.$store.dispatch("getAllTradeTypes");
 
-      console.log(tempMethods);
-
       tempMethods.forEach((method) => {
         this.categories.method.options.push(method.TypeName);
+      });
+    },
+
+    async getDuration() {
+      const tempDuration = await this.$store.dispatch("getAllDurations");
+
+      tempDuration.forEach((duration) => {
+        this.categories.duration.options.push(duration.Duration);
       });
     },
 

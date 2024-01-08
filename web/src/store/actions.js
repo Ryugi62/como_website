@@ -178,4 +178,18 @@ export const actions = {
       console.error("Get all trade types failed:", error);
     }
   },
+
+  async getAllDurations({ commit }) {
+    try {
+      const response = await axios.get("/api/durations");
+
+      if (response.status === 200) {
+        commit("setDurations", response.data);
+
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Get all durations failed:", error);
+    }
+  },
 };
