@@ -154,6 +154,39 @@ async function changeUserMiddleware(req, res) {
   }
 }
 
+async function generateReferralLinkMiddleware(req, res) {
+  try {
+    const { userId } = req.body;
+    const [user] = await db.query("SELECT * FROM users WHERE userId = ?", [
+      userId,
+    ]);
+    if (!user) {
+      logger.log("error", "아이디가 존재하지 않습니다.", { userId });
+      return res.status(400).send("아이디가 존재하지 않습니다.");
+    } else if (user.referralLink) {
+      logger.log("error", "이미 추천 링크가 존재합니다.", { userId });
+      return res.status(400).send("이미 추천 링크가 존재합니다.");
+    }
+
+    const referralLink = `${process.env.BASE_URL}/register?referralId=${userId}`;
+    logger.log("success", "추천 링크 생성 성공", { userId, referralLink });
+
+    await db.query("UPDATE users SET referralLink = ? WHERE userId = ?", [
+      referralLink,
+      userId,
+    ]);
+
+    const [updatedUser] = await db.query(
+      "SELECT * FROM users WHERE userId = ?",
+      [userId]
+    );
+
+    res.status(200).send(removePassword(updatedUser));
+  } catch (error) {
+    handleServerError(res, "추천 링크 생성 오류", error);
+  }
+}
+
 // 서버 오류 처리
 function handleServerError(res, message, error) {
   const errorMessage = `${message}: ${error.message}`;
@@ -190,6 +223,12 @@ router.post(
   validateFields(["userId", "password"]),
   loginUserMiddleware
 );
+
+router.post("/generateReferralLink", (req, res) => {
+  console.log("req.body:", req.body);
+
+  generateReferralLinkMiddleware(req, res);
+});
 
 // 로그아웃 라우트
 router.get("/logout", logoutUserMiddleware);

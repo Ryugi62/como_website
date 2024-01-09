@@ -29,6 +29,23 @@ export const actions = {
     }
   },
 
+  async generateReferralLink({ commit }, credentials) {
+    try {
+      const response = await axios.post(
+        "/api/users/generateReferralLink",
+        credentials
+      );
+
+      if (response.status === 200) {
+        commit("setUser", response.data);
+
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Generate referral link failed:", error);
+    }
+  },
+
   async deleteUser({ commit }, credentials) {
     try {
       console.log("credentials:", credentials);

@@ -20,8 +20,11 @@
     <section class="referral-section">
       <h2>당신의 추천 링크</h2>
       <p>친구들과 추천 링크를 공유하세요.</p>
-      <p class="referral-link" @click="copyToClipboard">
-        https://www.codingfactory.com/referral/123456789
+      <p class="referral-link" @click="copyToClipboard" v-if="referralLink">
+        {{ referralLink }}
+      </p>
+      <p class="referral-link" @click="generateReferralLink" v-else>
+        추천 링크를 생성하세요.
       </p>
     </section>
 
@@ -89,7 +92,6 @@ export default {
     return {
       referralLink: null,
       referrals: [
-        // Sample referral data
         {
           id: 1,
           name: "John Doe",
@@ -97,21 +99,49 @@ export default {
           investedAmount: 100000,
           commission: 10000,
         },
-        // ... additional referral objects
       ],
       totalEarnings: 0,
       isModalVisible: false,
     };
   },
 
+  mounted() {
+    this.referralLink = this.$store.getters.userReferralLink;
+  },
+
   methods: {
     generateReferralLink() {
-      // Method to generate a referral link
+      console.log(this.$store.getters.userId);
+
+      // 추천 링크를 생성하는 메서드
+      this.$store
+        .dispatch("generateReferralLink", {
+          userId: this.$store.getters.userId,
+        })
+        .then(() => {
+          this.referralLink = this.$store.getters.userReferralLink;
+        });
     },
 
-    copyToClipboard($event) {
-      // 클립보드에 텍스트를 복사하는 메서드
-      window.navigator.clipboard.writeText($event.target.innerText);
+    copyToClipboard() {
+      if (!this.referralLink) {
+        return; // 클립보드에 복사할 내용이 없으면 아무 작업도 하지 않음
+      }
+
+      if (navigator.clipboard) {
+        // 브라우저에서 클립보드 작업을 지원하는 경우
+        navigator.clipboard
+          .writeText(this.referralLink)
+          .then(() => {
+            alert("클립보드에 복사되었습니다.");
+          })
+          .catch((error) => {
+            console.error("클립보드 복사 오류:", error);
+          });
+      } else {
+        // 브라우저에서 클립보드 작업을 지원하지 않는 경우
+        console.error("브라우저에서 클립보드 작업을 지원하지 않습니다.");
+      }
     },
 
     openModal() {
