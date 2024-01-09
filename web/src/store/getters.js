@@ -15,4 +15,25 @@ export const getters = {
   userTotalPaidAmount: (state) => state.user?.totalPaidAmount,
   userId: (state) => state.user?.userId,
   userSupscription: (state) => state.user?.subscription,
+
+  getBotIDByName: (state) => (name) => {
+    const bot = state.Bots.find((bot) => bot.BotName === name);
+    return bot ? bot.BotID : null;
+  },
+  getTradeTypeIDByName: (state) => (name) => {
+    const tradeType = state.TradeTypes.find(
+      (tradeType) => tradeType.TypeName === name
+    );
+    return tradeType ? tradeType.TradeTypeID : null;
+  },
+  getDurationIDByName: (state) => (name) => {
+    const duration = state.Durations.find(
+      (duration) => duration.Duration === name
+    );
+    return duration ? duration.DurationID : null;
+  },
+  getGradeIDByName: (state) => (name) => {
+    const grade = state.Grades.find((grade) => grade.GradeName === name);
+    return grade ? grade.GradeID : null;
+  },
 };

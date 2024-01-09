@@ -33,9 +33,8 @@ router.get("/", async (req, res) => {
         TradeType: detail.TradeType,
         Duration: detail.Duration,
         Grade: detail.Grade,
-        // to number
-        Prices: Number(detail.Prices),
-        Features: detail.Features.split(","),
+        Prices: Number(detail.Prices) ? [Number(detail.Prices)] : 0,
+        Features: detail.Features ? detail.Features.split(",") : [],
       };
     });
 
@@ -66,23 +65,6 @@ router.post("/", async (req, res) => {
       GradeID,
     ]);
     const newPlanDetailId = result.insertId;
-
-    // Prices 추가
-    if (Prices && Prices.length) {
-      const pricesQuery = `INSERT INTO Prices (PlanDetailID, Price) VALUES ?`;
-      const pricesValues = Prices.map((price) => [newPlanDetailId, price]);
-      await db.query(pricesQuery, [pricesValues]);
-    }
-
-    // Features 추가
-    if (Features && Features.length) {
-      const featuresQuery = `INSERT INTO Features (PlanDetailID, FeatureName) VALUES ?`;
-      const featuresValues = Features.map((feature) => [
-        newPlanDetailId,
-        feature,
-      ]);
-      await db.query(featuresQuery, [featuresValues]);
-    }
 
     res.status(201).json({
       message: "New PlanDetail added successfully",

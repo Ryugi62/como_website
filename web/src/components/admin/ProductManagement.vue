@@ -327,7 +327,19 @@ export default {
       let scrollId = 0;
 
       if (!isDuplicate) {
-        this.planDetails.push(newPlan);
+        // BotID, TradeTypeID, DurationID, GradeID, Prices, Features
+        const tempPlan = {
+          BotID: this.$store.getters.getBotIDByName(newPlan.title),
+          TradeTypeID: this.$store.getters.getTradeTypeIDByName(newPlan.method),
+          DurationID: this.$store.getters.getDurationIDByName(newPlan.duration),
+          GradeID: this.$store.getters.getGradeIDByName(newPlan.grade),
+          Prices: newPlan.price,
+          Features: newPlan.features,
+        };
+
+        this.$store.dispatch("addPlanDetail", tempPlan);
+        this.$store.dispatch("getAllPlanDetails");
+
         scrollId = newPlan.id - 1;
       } else {
         alert("이미 추가된 상품입니다.");

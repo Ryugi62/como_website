@@ -134,6 +134,8 @@ export const actions = {
       const response = await axios.post("/api/plan-details", planDetail);
 
       if (response.status === 200) {
+        console.log("response.data:", response.data);
+        console.log(commit);
         commit("addPlanDetail", response.data);
       }
     } catch (error) {
