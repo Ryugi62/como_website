@@ -5,6 +5,10 @@
 <script>
 export default {
   name: "App",
+
+  mounted() {
+    document.title = "코모 - COMO";
+  },
 };
 </script>
 

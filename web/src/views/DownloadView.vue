@@ -54,13 +54,15 @@ import FooterComponent from "@/components/FooterComponent.vue";
 
 export default {
   name: "RegisterView",
+
   components: {
     HeaderComponent,
     FooterComponent,
   },
+
   data() {
     return {
-      botList: ["BINANCE", "UPBIT", "BITHUMB", "ARBI", "NOTICE"],
+      botList: [],
       activeBotIndex: 0,
       durations: [
         {
@@ -73,6 +75,22 @@ export default {
         },
       ],
     };
+  },
+
+  mounted() {
+    this.fetchBotList();
+  },
+
+  methods: {
+    fetchBotList() {
+      const bots = this.$store.dispatch("getAllBots");
+
+      bots.then((res) => {
+        res.forEach((bot) => {
+          this.botList.push(bot.BotName);
+        });
+      });
+    },
   },
 };
 </script>
