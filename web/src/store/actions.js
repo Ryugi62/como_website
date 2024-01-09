@@ -134,8 +134,6 @@ export const actions = {
       const response = await axios.post("/api/plan-details", planDetail);
 
       if (response.status === 200) {
-        console.log("response.data:", response.data);
-        console.log(commit);
         commit("addPlanDetail", response.data);
       }
     } catch (error) {
@@ -163,12 +161,12 @@ export const actions = {
   async updatePlanDetail({ commit }, planDetail) {
     try {
       const response = await axios.put(
-        `/api/plan-details/${planDetail._id}`,
+        `/api/plan-details/${planDetail.PlanDetailID}`,
         planDetail
       );
 
       if (response.status === 200) {
-        commit("updatePlanDetail", planDetail);
+        console.log(commit);
       }
     } catch (error) {
       console.error("Update plan detail failed:", error);

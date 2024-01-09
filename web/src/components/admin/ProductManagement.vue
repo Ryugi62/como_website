@@ -147,7 +147,7 @@
               </button>
             </template>
             <template v-else>
-              <button @click="toggleEdit(plan)">저장</button>
+              <button @click="savePlan(plan)">저장</button>
               <button @click="toggleEdit(plan)" class="delete-button">
                 취소
               </button>
@@ -274,6 +274,45 @@ export default {
       plan.edit = !plan.edit;
     },
 
+    savePlan(plan) {
+      // object Object to 객체로 변환
+      const planDetailID = JSON.parse(JSON.stringify(plan)).PlanDetailID;
+
+      // BotName, TradeType, Duration, Grade 중복 확인
+      const isDuplicate = this.planDetails.some(
+        (tempPlan) =>
+          tempPlan.PlanDetailID !== planDetailID &&
+          tempPlan.BotName === plan.title &&
+          tempPlan.TradeType === plan.method &&
+          tempPlan.Duration === plan.duration &&
+          tempPlan.Grade === plan.grade
+      );
+
+      if (isDuplicate) {
+        alert("이미 추가된 상품입니다.");
+        return;
+      }
+
+      const tempPlan = {
+        PlanDetailID: planDetailID,
+        BotID: this.$store.getters.getBotIDByName(plan.title),
+        TradeTypeID: this.$store.getters.getTradeTypeIDByName(plan.method),
+        DurationID: this.$store.getters.getDurationIDByName(plan.duration),
+        GradeID: this.$store.getters.getGradeIDByName(plan.grade),
+        Prices: plan.price,
+        Features: plan.features,
+      };
+
+      const result = this.$store.dispatch("updatePlanDetail", tempPlan);
+
+      if (result) {
+        alert("상품이 수정되었습니다.");
+        this.getPlanDetailList();
+      } else {
+        alert("상품 수정에 실패했습니다.");
+      }
+    },
+
     deletePlan(plan) {
       // object Object to 객체로 변환
       const planDetailID = JSON.parse(JSON.stringify(plan)).PlanDetailID;
@@ -287,7 +326,7 @@ export default {
       }
     },
 
-    addPlan() {
+    async addPlan() {
       if (
         !this.categories.bot.selected ||
         !this.categories.method.selected ||
@@ -337,8 +376,8 @@ export default {
           Features: newPlan.features,
         };
 
-        this.$store.dispatch("addPlanDetail", tempPlan);
-        this.$store.dispatch("getAllPlanDetails");
+        await this.$store.dispatch("addPlanDetail", tempPlan);
+        await this.getPlanDetailList();
 
         scrollId = newPlan.id - 1;
       } else {
@@ -368,8 +407,6 @@ export default {
     },
 
     editPlan(plan) {
-      // 서버에 수정된 상품 정보를 보내는 코드
-      // ...
       plan.edit = false;
     },
 

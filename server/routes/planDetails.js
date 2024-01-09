@@ -47,8 +47,7 @@ router.get("/", async (req, res) => {
 
 // POST: 새로운 PlanDetail 추가
 router.post("/", async (req, res) => {
-  const { BotID, TradeTypeID, DurationID, GradeID, Prices, Features } =
-    req.body;
+  const { BotID, TradeTypeID, DurationID, GradeID } = req.body;
 
   if (!BotID || !TradeTypeID || !DurationID || !GradeID) {
     return res.status(400).json({
@@ -102,9 +101,19 @@ router.delete("/:planDetailId", async (req, res) => {
 // PUT: 특정 PlanDetail 업데이트
 router.put("/:planDetailId", async (req, res) => {
   const { planDetailId } = req.params;
-  const { BotID, TradeTypeID, DurationID, GradeID } = req.body;
+  const { BotID, TradeTypeID, DurationID, GradeID, Prices, Features } =
+    req.body;
 
-  if (!BotID || !TradeTypeID || !DurationID || !GradeID) {
+  console.log("req.body:", req.body);
+
+  if (
+    !BotID ||
+    !TradeTypeID ||
+    !DurationID ||
+    !GradeID ||
+    !Prices ||
+    !Features
+  ) {
     return res.status(400).json({
       error: "BotID, TradeTypeID, DurationID, and GradeID are required",
     });
@@ -120,6 +129,26 @@ router.put("/:planDetailId", async (req, res) => {
       GradeID,
       planDetailId,
     ]);
+
+    // 기존의 Prices 및 Features 삭제
+    await db.query("DELETE FROM Prices WHERE PlanDetailID = ?", [planDetailId]);
+    await db.query("DELETE FROM Features WHERE PlanDetailID = ?", [
+      planDetailId,
+    ]);
+
+    // 새로운 Prices 및 Features 추가
+    await db.query("INSERT INTO Prices (PlanDetailID, Price) VALUES (?, ?)", [
+      planDetailId,
+      Prices,
+    ]);
+    for (const feature of Features) {
+      console.log("feature:", feature);
+
+      await db.query(
+        "INSERT INTO Features (PlanDetailID, FeatureName) VALUES (?, ?)",
+        [planDetailId, feature]
+      );
+    }
 
     if (result.affectedRows === 1) {
       res.status(200).json({ message: "Plan detail updated successfully" });
