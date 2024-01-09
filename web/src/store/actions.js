@@ -192,4 +192,18 @@ export const actions = {
       console.error("Get all durations failed:", error);
     }
   },
+
+  async getAllGrades({ commit }) {
+    try {
+      const response = await axios.get("/api/grades");
+
+      if (response.status === 200) {
+        commit("setGrades", response.data);
+
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Get all grades failed:", error);
+    }
+  },
 };

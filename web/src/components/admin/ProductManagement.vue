@@ -178,7 +178,7 @@ export default {
 
         grade: {
           title: "등급",
-          options: ["FREE", "BASIC", "EXPERT"],
+          options: [],
           selected: "",
         },
       },
@@ -188,14 +188,15 @@ export default {
   },
 
   mounted() {
-    this.getPlanDetails();
-    this.getBots();
-    this.getMethods();
-    this.getDuration();
+    this.getPlanDetailList();
+    this.getBotList();
+    this.getMethodList();
+    this.getDurationList();
+    this.getGradeList();
   },
 
   methods: {
-    async getPlanDetails() {
+    async getPlanDetailList() {
       const tempDetail = await this.$store.dispatch("getAllPlanDetails");
 
       tempDetail.forEach((plan, index) => {
@@ -212,7 +213,7 @@ export default {
       this.planDetails = tempDetail;
     },
 
-    async getBots() {
+    async getBotList() {
       const tempBots = await this.$store.dispatch("getAllBots");
 
       tempBots.forEach((bot) => {
@@ -220,7 +221,7 @@ export default {
       });
     },
 
-    async getMethods() {
+    async getMethodList() {
       const tempMethods = await this.$store.dispatch("getAllTradeTypes");
 
       tempMethods.forEach((method) => {
@@ -228,11 +229,19 @@ export default {
       });
     },
 
-    async getDuration() {
+    async getDurationList() {
       const tempDuration = await this.$store.dispatch("getAllDurations");
 
       tempDuration.forEach((duration) => {
         this.categories.duration.options.push(duration.Duration);
+      });
+    },
+
+    async getGradeList() {
+      const tempGrade = await this.$store.dispatch("getAllGrades");
+
+      tempGrade.forEach((grade) => {
+        this.categories.grade.options.push(grade.GradeName);
       });
     },
 

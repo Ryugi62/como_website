@@ -24,6 +24,7 @@ app.use("/api/admins", require("./routes/admins"));
 app.use("/api/bots", require("./routes/bots"));
 app.use("/api/trade-types", require("./routes/tradeTypes"));
 app.use("/api/durations", require("./routes/durations"));
+app.use("/api/grades", require("./routes/grades"));
 app.use("/api/plan-details", require("./routes/planDetails"));
 app.use("/api/prices", require("./routes/prices"));
 app.use("/api/features", require("./routes/features"));

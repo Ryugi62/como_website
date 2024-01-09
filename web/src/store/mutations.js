@@ -15,4 +15,24 @@ export const mutations = {
     state.planDetail = value;
     localStorage.setItem("planDetail", JSON.stringify(value));
   },
+
+  setBots(state, value) {
+    state.Bots = value;
+    localStorage.setItem("Bots", JSON.stringify(value));
+  },
+
+  setTradeTypes(state, value) {
+    state.TradeTypes = value;
+    localStorage.setItem("TradeTypes", JSON.stringify(value));
+  },
+
+  setDurations(state, value) {
+    state.DurationTypes = value;
+    localStorage.setItem("Durations", JSON.stringify(value));
+  },
+
+  setGrades(state, value) {
+    state.Grades = value;
+    localStorage.setItem("Grades", JSON.stringify(value));
+  },
 };
