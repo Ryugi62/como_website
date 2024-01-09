@@ -11,7 +11,9 @@
           코인을 수익화할수 있는 모든 툴을 제공하는 우리는
           <strong>코모</strong>입니다.
         </p>
-        <button class="button como-button1">코모와 함께하기</button>
+        <button class="button como-button1" @click="$router.push('/register')">
+          코모와 함께하기
+        </button>
       </article>
 
       <div class="image-container">

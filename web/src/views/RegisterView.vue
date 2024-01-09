@@ -163,6 +163,13 @@ export default {
     };
   },
 
+  mounted() {
+    if (this.$store.getters.isLoggedIn) {
+      alert("이미 로그인되어 있습니다.");
+      this.$router.push("/");
+    }
+  },
+
   methods: {
     async handleRegistration() {
       if (!this.validateForm()) return;
