@@ -1,38 +1,11 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const db = require("../config/database");
-const session = require("express-session");
-const helmet = require("helmet");
 const logger = require("./logger");
 
 require("dotenv").config();
 
 const router = express.Router();
-
-setupMiddlewares(router);
-
-// 미들웨어 설정
-function setupMiddlewares(router) {
-  // 보안 헤더 추가
-  router.use(helmet());
-
-  // 세션 미들웨어 추가
-  router.use(sessionMiddleware());
-}
-
-// 세션 미들웨어
-function sessionMiddleware() {
-  return session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      secure: true,
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
-    },
-  });
-}
 
 // 필드 유효성 검사 미들웨어
 function validateFields(requiredFields) {

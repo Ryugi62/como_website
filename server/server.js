@@ -1,16 +1,32 @@
 require("dotenv").config();
-const express = require("express");
 const cors = require("cors");
+const express = require("express");
+const session = require("express-session");
+const helmet = require("helmet");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(helmet());
 app.use(express.static(__dirname + "/dist"));
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
 });
+// 세션 설정
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
 
 // log 출력
 app.use((req, res, next) => {
