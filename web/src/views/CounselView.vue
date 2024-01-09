@@ -149,11 +149,9 @@ export default {
   methods: {
     toggleFaqItem(item) {
       item.isOpen = !item.isOpen;
-      if (item.isOpen) {
-        this.$nextTick(() => {
-          this.scrollToView(this.$refs[`faqItem${item.question}`]);
-        });
-      }
+      this.$nextTick(() => {
+        this.scrollToView(this.$refs[`faqItem${item.question}`]);
+      });
       this.faqList = this.faqList.map((faq) =>
         faq.question === item.question ? item : faq
       );
