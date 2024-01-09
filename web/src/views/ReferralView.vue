@@ -20,7 +20,7 @@
     <section class="referral-section">
       <h2>당신의 추천 링크</h2>
       <p>친구들과 추천 링크를 공유하세요.</p>
-      <p class="referral-link">
+      <p class="referral-link" @click="copyToClipboard">
         https://www.codingfactory.com/referral/123456789
       </p>
     </section>
@@ -107,6 +107,11 @@ export default {
   methods: {
     generateReferralLink() {
       // Method to generate a referral link
+    },
+
+    copyToClipboard($event) {
+      // 클립보드에 텍스트를 복사하는 메서드
+      window.navigator.clipboard.writeText($event.target.innerText);
     },
 
     openModal() {
