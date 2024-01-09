@@ -184,12 +184,17 @@ export default {
 }
 
 .section-banner {
-  background-color: #d59f19;
+  background-color: #ffc025;
   text-align: center;
   margin-top: 30px;
-  padding: 70px 0;
+  padding: 80px 0;
   border-radius: 8px;
   margin-bottom: 30px;
+  color: #333;
+}
+
+.section-banner h1 {
+  font-size: 1.7em;
 }
 
 .section-counsel,
