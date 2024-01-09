@@ -31,7 +31,6 @@
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import UserManagement from "@/components/admin/UserManagement.vue";
 import ProductManagement from "@/components/admin/ProductManagement.vue";
-import OrderManagement from "@/components/admin/OrderManagement.vue";
 
 export default {
   name: "AdminView",
@@ -40,7 +39,6 @@ export default {
     HeaderComponent,
     UserManagement,
     ProductManagement,
-    OrderManagement,
   },
 
   data() {
@@ -56,11 +54,11 @@ export default {
           title: "상품 관리",
           component: ProductManagement,
         },
-        {
-          icon: "fas fa-shopping-cart",
-          title: "주문 관리",
-          component: OrderManagement,
-        },
+        // {
+        //   icon: "fas fa-shopping-cart",
+        //   title: "주문 관리",
+        //   component: OrderManagement,
+        // },
       ],
 
       selectedFeature: "회원 관리",
