@@ -168,7 +168,17 @@ export default {
       }
     },
     connectCounsel(title) {
-      console.log(title); // Implement your connection logic here
+      switch (title) {
+        case "전화 상담":
+          window.open("tel:010-1234-5678");
+          break;
+        case "카카오톡 상담":
+          window.open("https://pf.kakao.com/_xkxkxkxk");
+          break;
+        case "이메일 상담":
+          window.open("mailto:xorjf1027@naver.com");
+          break;
+      }
     },
   },
 };
