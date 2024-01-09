@@ -12,7 +12,7 @@ export const mutations = {
   },
 
   setPlanDetails(state, value) {
-    state.planDetail = value;
+    state.planDetails = value;
     localStorage.setItem("planDetail", JSON.stringify(value));
   },
 

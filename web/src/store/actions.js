@@ -129,10 +129,15 @@ export const actions = {
       const response = await axios.delete(`/api/plan-details/${planDetailId}`);
 
       if (response.status === 200) {
-        commit("deletePlanDetail", planDetailId);
+        commit;
+
+        return true;
       }
+
+      return false;
     } catch (error) {
-      console.error("Delete plan detail failed:", error);
+      console.error("Error deleting plan detail:", error);
+      throw error; // 오류를 호출자에게 전달
     }
   },
 

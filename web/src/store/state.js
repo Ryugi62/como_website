@@ -7,8 +7,8 @@ export const state = {
     ? JSON.parse(localStorage.getItem("user"))
     : null,
 
-  planDetail: localStorage.getItem("planDetail")
-    ? JSON.parse(localStorage.getItem("planDetail"))
+  planDetails: localStorage.getItem("planDetails")
+    ? JSON.parse(localStorage.getItem("planDetails"))
     : null,
 
   Bots: localStorage.getItem("Bots")

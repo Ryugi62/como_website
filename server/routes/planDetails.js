@@ -98,17 +98,21 @@ router.post("/", async (req, res) => {
 router.delete("/:planDetailId", async (req, res) => {
   const { planDetailId } = req.params;
 
-  try {
-    const query = "DELETE FROM PlanDetails WHERE PlanDetailID = ?";
-    const result = await db.query(query, [planDetailId]);
+  console.log("planDetailId:", planDetailId);
 
-    if (result.affectedRows === 1) {
-      res.status(200).json({ message: "Plan detail deleted successfully" });
-    } else {
-      res.status(404).json({ error: "Plan detail not found" });
+  try {
+    const result = await db.query(
+      "DELETE FROM PlanDetails WHERE PlanDetailID = ?",
+      [planDetailId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Plan detail not found" });
     }
+
+    res.status(200).json({ message: "Plan detail deleted successfully" });
   } catch (error) {
-    console.error("Delete plan detail failed:", error);
+    console.error("Error deleting plan detail:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

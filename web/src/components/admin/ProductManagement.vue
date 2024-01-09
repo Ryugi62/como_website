@@ -138,12 +138,20 @@
             </template>
           </td>
           <td>
-            <button @click="toggleEdit(plan)">
-              {{ plan.edit ? "저장" : "수정" }}
-            </button>
-            <button @click="deletePlan(plan)" class="delete-button">
-              삭제
-            </button>
+            <!-- 수정 버튼을 누르면 저장 / 취소 -->
+            <!-- 수정 버튼 안누르면 수정 / 삭제 -->
+            <template v-if="!plan.edit">
+              <button @click="toggleEdit(plan)">수정</button>
+              <button @click="deletePlan(plan)" class="delete-button">
+                삭제
+              </button>
+            </template>
+            <template v-else>
+              <button @click="toggleEdit(plan)">저장</button>
+              <button @click="toggleEdit(plan)" class="delete-button">
+                취소
+              </button>
+            </template>
           </td>
         </tr>
       </tbody>
@@ -267,8 +275,16 @@ export default {
     },
 
     deletePlan(plan) {
-      const index = this.planDetails.findIndex((item) => item.id === plan.id);
-      if (index !== -1) this.planDetails.splice(index, 1);
+      // object Object to 객체로 변환
+      const planDetailID = JSON.parse(JSON.stringify(plan)).PlanDetailID;
+
+      const result = this.$store.dispatch("deletePlanDetail", planDetailID);
+      if (result) {
+        alert("상품이 삭제되었습니다.");
+        this.getPlanDetailList();
+      } else {
+        alert("상품 삭제에 실패했습니다.");
+      }
     },
 
     addPlan() {
@@ -330,7 +346,19 @@ export default {
       }
 
       this.scrollToPlan(scrollId);
-      this.flashPlan(scrollId);
+
+      // 만약 새로운 상품이 추가되었다면 scrollId + 1
+      if (!isDuplicate) {
+        this.flashPlan(scrollId + 1);
+      } else {
+        this.flashPlan(scrollId);
+      }
+    },
+
+    editPlan(plan) {
+      // 서버에 수정된 상품 정보를 보내는 코드
+      // ...
+      plan.edit = false;
     },
 
     scrollToPlan(planId) {
