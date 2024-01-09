@@ -35,7 +35,7 @@
       >
         <div class="duration-text">
           <h2>
-            바이낸스 봇 Trade Titan_binance_{{ botList[activeBotIndex] }}
+            Trade Titan_binance_{{ botList[activeBotIndex] }}
             <strong>{{ duration.period }}</strong>
           </h2>
           <p>{{ duration.description }}</p>
