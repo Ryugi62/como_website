@@ -184,9 +184,10 @@ export default {
 }
 
 .section-banner {
-  background-color: #005f73;
+  background-color: #d59f19;
   text-align: center;
-  padding: 40px 0;
+  margin-top: 30px;
+  padding: 70px 0;
   border-radius: 8px;
   margin-bottom: 30px;
 }
@@ -216,7 +217,7 @@ export default {
 }
 
 .remote-support {
-  background-color: #0096c7;
+  background-color: #222;
   color: white;
   padding: 20px;
   border-radius: 8px;
