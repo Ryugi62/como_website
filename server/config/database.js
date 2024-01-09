@@ -48,13 +48,13 @@ db.connect(async (err) => {
             PriceID INT AUTO_INCREMENT PRIMARY KEY,
             PlanDetailID INT,
             Price DECIMAL(10, 2),
-            FOREIGN KEY (PlanDetailID) REFERENCES PlanDetails(PlanDetailID)
+            FOREIGN KEY (PlanDetailID) REFERENCES PlanDetails(PlanDetailID) ON DELETE CASCADE
           )`,
     Features: `CREATE TABLE IF NOT EXISTS Features (
             FeatureID INT AUTO_INCREMENT PRIMARY KEY,
             PlanDetailID INT,
             FeatureName VARCHAR(255),
-            FOREIGN KEY (PlanDetailID) REFERENCES PlanDetails(PlanDetailID)
+            FOREIGN KEY (PlanDetailID) REFERENCES PlanDetails(PlanDetailID) ON DELETE CASCADE
           )`,
     Users: `CREATE TABLE IF NOT EXISTS users (
             id INT AUTO_INCREMENT PRIMARY KEY,
