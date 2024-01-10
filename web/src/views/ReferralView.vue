@@ -128,20 +128,8 @@ export default {
         return; // 클립보드에 복사할 내용이 없으면 아무 작업도 하지 않음
       }
 
-      if (navigator.clipboard) {
-        // 브라우저에서 클립보드 작업을 지원하는 경우
-        navigator.clipboard
-          .writeText(this.referralLink)
-          .then(() => {
-            alert("클립보드에 복사되었습니다.");
-          })
-          .catch((error) => {
-            console.error("클립보드 복사 오류:", error);
-          });
-      } else {
-        // 브라우저에서 클립보드 작업을 지원하지 않는 경우
-        console.error("브라우저에서 클립보드 작업을 지원하지 않습니다.");
-      }
+      // 추천 링크를 클립보드에 복사하는 메서드
+      navigator.clipboard.writeText(this.referralLink);
     },
 
     openModal() {
