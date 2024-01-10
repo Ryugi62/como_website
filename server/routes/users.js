@@ -168,7 +168,11 @@ async function generateReferralLinkMiddleware(req, res) {
       return res.status(400).send("이미 추천 링크가 존재합니다.");
     }
 
-    const referralLink = `${process.env.BASE_URL}/register?referralId=${userId}`;
+    const referralLink = `${
+      process.env.VUE_APP_SERVER_DNS_URL ||
+      process.env.VUE_APP_SERVER_URL ||
+      process.env.VUE_APP_SERVER_LOCAL_URL
+    }/register?referralId=${userId}`;
     logger.log("success", "추천 링크 생성 성공", { userId, referralLink });
 
     await db.query("UPDATE users SET referralLink = ? WHERE userId = ?", [
@@ -226,7 +230,6 @@ router.post(
 
 router.post("/generateReferralLink", (req, res) => {
   console.log("req.body:", req.body);
-
   generateReferralLinkMiddleware(req, res);
 });
 
@@ -237,3 +240,4 @@ router.get("/logout", logoutUserMiddleware);
 router.post("/changeUser", changeUserMiddleware);
 
 module.exports = router;
+
