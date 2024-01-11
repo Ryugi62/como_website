@@ -61,7 +61,7 @@ export default {
         { name: "프로그램 소개", path: "/program", requiresAuth: true }, // 로그인 필요
         { name: "상품가격", path: "/pricing", requiresAuth: false },
         { name: "프로그램 다운로드", path: "/download", requiresAuth: true }, // 로그인 필요
-        { name: "레퍼럴", path: "/referral", requiresAuth: true }, // 로그인 필요
+        { name: "레퍼럴", path: "/referral", requiresAuth: false }, // 로그인 필요
         { name: "상담신청", path: "/counsel", requiresAuth: false },
       ],
       userButtons: [
