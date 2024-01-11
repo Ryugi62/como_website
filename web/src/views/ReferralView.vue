@@ -133,7 +133,8 @@ export default {
     },
 
     openModal() {
-      this.isModalVisible = true;
+      // signup page로 이동
+      this.$router.push("/signup");
     },
   },
 };
