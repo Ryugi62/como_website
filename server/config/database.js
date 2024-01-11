@@ -45,11 +45,14 @@ db.connect(async (err) => {
             FOREIGN KEY (GradeID) REFERENCES Grades(GradeID)
           )`,
     Prices: `CREATE TABLE IF NOT EXISTS Prices (
-            PriceID INT AUTO_INCREMENT PRIMARY KEY,
-            PlanDetailID INT,
-            Price DECIMAL(10, 2),
-            FOREIGN KEY (PlanDetailID) REFERENCES PlanDetails(PlanDetailID) ON DELETE CASCADE
-          )`,
+      PriceID INT AUTO_INCREMENT PRIMARY KEY,
+      PlanDetailID INT,
+      Price DECIMAL(10, 2),
+      DiscountAmount DECIMAL(10, 2) DEFAULT 0.00,
+      DiscountPercentage DECIMAL(5, 2) DEFAULT 0.00,
+      IsDiscountActive TINYINT(1) DEFAULT 0,
+      FOREIGN KEY (PlanDetailID) REFERENCES PlanDetails(PlanDetailID) ON DELETE CASCADE 
+    )`,
     Features: `CREATE TABLE IF NOT EXISTS Features (
             FeatureID INT AUTO_INCREMENT PRIMARY KEY,
             PlanDetailID INT,

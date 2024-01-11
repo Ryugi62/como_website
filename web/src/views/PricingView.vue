@@ -214,8 +214,6 @@ export default {
         : null;
       if (!plan) return "";
 
-      console.log(`plan: ${JSON.stringify(plan)}`);
-
       const originalPrice = plan.price.toLocaleString();
       let discountedPrice = "";
 
