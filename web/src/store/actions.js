@@ -166,7 +166,9 @@ export const actions = {
       );
 
       if (response.status === 200) {
-        console.log(commit);
+        console.log(`commit : ${commit}`);
+
+        return true;
       }
     } catch (error) {
       console.error("Update plan detail failed:", error);

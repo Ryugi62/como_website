@@ -1,81 +1,97 @@
 <template>
-  <HeaderComponent />
+  <div>
+    <HeaderComponent />
+    <main class="pricing-main">
+      <section class="pricing-section">
+        <h1 class="section-title">Pricing</h1>
 
-  <main class="pricing-main">
-    <section class="pricing-section">
-      <h1 class="section-title">Pricing</h1>
-
-      <!-- Selections -->
-      <div class="selections">
-        <!-- Bot Selection -->
-        <div class="selection">
-          <label for="bot">봇</label>
-          <select
-            name="bot"
-            id="bot"
-            v-model="selectedBot"
-            @change="clearSelections('bot')"
-          >
-            <option v-for="bot in botOptions" :key="bot">{{ bot }}</option>
-          </select>
-        </div>
-
-        <!-- Method Selection -->
-        <div class="selection">
-          <label for="method">거래 방식</label>
-          <select
-            name="method"
-            id="method"
-            v-model="selectedMethod"
-            @change="clearSelections('method')"
-          >
-            <option v-for="method in methodOptions" :key="method">
-              {{ method }}
-            </option>
-          </select>
-        </div>
-
-        <!-- Duration Selection -->
-        <div class="selection">
-          <label for="duration">기간</label>
-          <select
-            name="duration"
-            id="duration"
-            v-model="selectedDuration"
-            @change="clearSelections('duration')"
-          >
-            <option v-for="duration in durationOptions" :key="duration">
-              {{ duration }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Grades Section -->
-      <div class="grades-section">
-        <div class="grade" v-for="grade in gradeOptions" :key="grade">
-          <h2>{{ grade }}</h2>
-
-          <div v-if="planDetailsAvailable(grade)">
-            <p>
-              Price: <strong>{{ getPlanPrice(grade) }} 원</strong> / 월
-            </p>
-            <ul>
-              <li v-for="feature in getPlanFeatures(grade)" :key="feature">
-                {{ feature }}
-              </li>
-            </ul>
+        <!-- Selections -->
+        <div class="selections">
+          <!-- Bot Selection -->
+          <div class="selection">
+            <label for="bot">봇</label>
+            <select
+              name="bot"
+              id="bot"
+              v-model="selectedBot"
+              @change="clearSelections('bot')"
+            >
+              <option v-for="bot in botOptions" :key="bot">{{ bot }}</option>
+            </select>
           </div>
-          <div v-else class="placeholder">준비중입니다.</div>
-          <button class="subscribe-button" v-if="planDetailsAvailable(grade)">
-            구독하기
-          </button>
-        </div>
-      </div>
-    </section>
-  </main>
 
-  <FooterComponent />
+          <!-- Method Selection -->
+          <div class="selection">
+            <label for="method">거래 방식</label>
+            <select
+              name="method"
+              id="method"
+              v-model="selectedMethod"
+              @change="clearSelections('method')"
+            >
+              <option v-for="method in methodOptions" :key="method">
+                {{ method }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Duration Selection -->
+          <div class="selection">
+            <label for="duration">기간</label>
+            <select
+              name="duration"
+              id="duration"
+              v-model="selectedDuration"
+              @change="clearSelections('duration')"
+            >
+              <option v-for="duration in durationOptions" :key="duration">
+                {{ duration }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Grades Section -->
+        <div class="grades-section">
+          <div class="grade" v-for="grade in gradeOptions" :key="grade">
+            <h2>{{ grade }}</h2>
+
+            <div v-if="planDetailsAvailable(grade)">
+              <p v-if="getPlanPrice(grade).discountedPrice">Original Price:</p>
+              <p>
+                Price:
+                <template v-if="getPlanPrice(grade).discountedPrice">
+                  <div class="test">
+                    <del style="color: #4c4c4c; font-size: 1.5rem"
+                      >{{ getPlanPrice(grade).originalPrice }} 원</del
+                    >
+                    <strong>
+                      {{ getPlanPrice(grade).discountedPrice }} 원
+                    </strong>
+                  </div>
+                </template>
+                <template v-else>
+                  <strong> {{ getPlanPrice(grade).originalPrice }} 원 </strong>
+                </template>
+                / 월
+              </p>
+
+              <ul>
+                <li v-for="feature in getPlanFeatures(grade)" :key="feature">
+                  {{ feature }}
+                </li>
+              </ul>
+            </div>
+            <div v-else class="placeholder">준비중입니다.</div>
+            <button class="subscribe-button" v-if="planDetailsAvailable(grade)">
+              구독하기
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <FooterComponent />
+  </div>
 </template>
 
 <script>
@@ -146,7 +162,7 @@ export default {
         // 계획 세부 정보를 가져오는 로직
         const planDetails = await this.$store.dispatch("getAllPlanDetails");
 
-        console.log("planDetails:", planDetails);
+        console.log(`planDetails: ${JSON.stringify(planDetails)}`);
 
         this.processPlanDetails(planDetails);
       } catch (error) {
@@ -155,22 +171,26 @@ export default {
     },
 
     processPlanDetails(planDetails) {
-      // planDetails에서 가져온 데이터를 기반으로 plans 객체를 구축합니다.
       planDetails.forEach((detail) => {
-        const { BotName, TradeType, Duration, Grade, Prices, Features } =
-          detail;
+        const { BotName, TradeType, Duration, Grade } = detail;
+
         if (!this.plans[BotName]) {
           this.plans[BotName] = {};
         }
+
         if (!this.plans[BotName][TradeType]) {
           this.plans[BotName][TradeType] = {};
         }
+
         if (!this.plans[BotName][TradeType][Duration]) {
           this.plans[BotName][TradeType][Duration] = {};
         }
+
         this.plans[BotName][TradeType][Duration][Grade] = {
-          price: Prices,
-          features: Features,
+          price: detail.Prices[0],
+          discountAmounts: detail.discountAmounts,
+          isDiscountActive: detail.isDiscountActives,
+          features: detail.Features,
         };
       });
     },
@@ -189,9 +209,28 @@ export default {
     },
 
     getPlanPrice(grade) {
-      return this.planDetailsAvailable(grade)
-        ? this.currentPlanDetails[grade].price.toLocaleString()
-        : "";
+      const plan = this.planDetailsAvailable(grade)
+        ? this.currentPlanDetails[grade]
+        : null;
+      if (!plan) return "";
+
+      console.log(`plan: ${JSON.stringify(plan)}`);
+
+      const originalPrice = plan.price.toLocaleString();
+      let discountedPrice = "";
+
+      if (
+        plan.isDiscountActive &&
+        plan.discountAmounts &&
+        plan.discountAmounts.length > 0
+      ) {
+        const discountAmount = plan.discountAmounts[0];
+        discountedPrice = (plan.price - discountAmount).toLocaleString();
+      }
+
+      return plan.isDiscountActive
+        ? { originalPrice, discountedPrice }
+        : { originalPrice };
     },
 
     getPlanFeatures(grade) {
@@ -356,6 +395,12 @@ main {
   align-items: center;
   margin-bottom: 20px;
   justify-content: center;
+}
+
+.test {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media (max-width: 768px) {

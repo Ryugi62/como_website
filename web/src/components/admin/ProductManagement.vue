@@ -33,6 +33,7 @@
           <th>기간</th>
           <th>등급</th>
           <th>가격</th>
+          <th>할인</th>
           <th>기능</th>
           <th>수정/삭제</th>
         </tr>
@@ -109,6 +110,25 @@
             </template>
             <template v-else>
               <input type="number" v-model.number="plan.price" />
+            </template>
+          </td>
+          <td>
+            <template v-if="!plan.edit">
+              {{
+                plan.discountAmounts
+                  .toLocaleString()
+                  .split("")
+                  .reverse()
+                  .join("")
+                  .match(/[0-9]{1,3}/g)
+                  .join(",")
+                  .split("")
+                  .reverse()
+                  .join("") + " 원"
+              }}
+            </template>
+            <template v-else>
+              <input type="number" v-model.number="plan.discountAmounts" />
             </template>
           </td>
           <td class="product-management__features">
@@ -213,6 +233,7 @@ export default {
         plan.method = plan.TradeType;
         plan.duration = plan.Duration;
         plan.price = plan.Prices;
+        plan.discountAmount = plan.discountAmounts;
         plan.grade = plan.Grade;
         plan.edit = false;
         plan.features = plan.Features;
@@ -274,7 +295,7 @@ export default {
       plan.edit = !plan.edit;
     },
 
-    savePlan(plan) {
+    async savePlan(plan) {
       // object Object to 객체로 변환
       const planDetailID = JSON.parse(JSON.stringify(plan)).PlanDetailID;
 
@@ -295,15 +316,20 @@ export default {
 
       const tempPlan = {
         PlanDetailID: planDetailID,
-        BotID: this.$store.getters.getBotIDByName(plan.title),
-        TradeTypeID: this.$store.getters.getTradeTypeIDByName(plan.method),
-        DurationID: this.$store.getters.getDurationIDByName(plan.duration),
-        GradeID: this.$store.getters.getGradeIDByName(plan.grade),
-        Prices: plan.price,
+        BotID: await this.$store.getters.getBotIDByName(plan.title),
+        TradeTypeID: await this.$store.getters.getTradeTypeIDByName(
+          plan.method
+        ),
+        DurationID: await this.$store.getters.getDurationIDByName(
+          plan.duration
+        ),
+        GradeID: await this.$store.getters.getGradeIDByName(plan.grade),
+        Price: plan.price,
+        DiscountAmount: plan.discountAmounts,
         Features: plan.features,
       };
 
-      const result = this.$store.dispatch("updatePlanDetail", tempPlan);
+      const result = await this.$store.dispatch("updatePlanDetail", tempPlan);
 
       if (result) {
         alert("상품이 수정되었습니다.");
