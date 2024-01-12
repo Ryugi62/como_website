@@ -36,12 +36,10 @@ router.get("/", async (req, res) => {
         TradeType: detail.TradeType,
         Duration: detail.Duration,
         Grade: detail.Grade,
-        Prices: Number(detail.Prices) ? [Number(detail.Prices)] : 0,
-        // discountAmounts: 10000,
+        Prices: Number(detail.Prices) ? [Number(detail.Prices)] : [0],
         discountAmounts: Number(detail.DiscountAmounts)
           ? [Number(detail.DiscountAmounts)]
-          : 0,
-        // discountPercentages: 10,
+          : [0],
         discountPercentages: Number(detail.DiscountPercentages)
           ? [Number(detail.DiscountPercentages)]
           : 0,
