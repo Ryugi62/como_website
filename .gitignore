@@ -1,9 +1,9 @@
-docs/*
-
 .DS_Store
 node_modules
 dist
 
+
+.env
 
 # local env files
 .env.local
@@ -23,5 +23,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+docs/*
 
 logs
